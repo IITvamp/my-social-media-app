@@ -6,12 +6,25 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    title: {
+      type: String,
+      max: 20,
+      default: "",
+    },
     desc: {
       type: String,
-      max: 500,
+      max: 100,
     },
     img: {
       type: String,
+    },
+    url: {
+      type: String,
+      default: "http://localhost:3000/",
+    },
+    tags: {
+      type: [String],
+      default:"",
     },
     likes: {
       type: Array,

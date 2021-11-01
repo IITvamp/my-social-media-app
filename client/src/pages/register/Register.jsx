@@ -10,6 +10,10 @@ export default function Register() {
   const passwordAgain = useRef();
   const history = useHistory();
 
+  const LoginButtonHandler = () => {
+    history.push("/login")
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     if (passwordAgain.current.value !== password.current.value) {
@@ -71,7 +75,7 @@ export default function Register() {
             <button className="loginButton" type="submit">
               Sign Up
             </button>
-            <button className="loginRegisterButton">Log into Account</button>
+            <button className="loginRegisterButton" onClick={LoginButtonHandler}>Log into Account</button>
           </form>
         </div>
       </div>

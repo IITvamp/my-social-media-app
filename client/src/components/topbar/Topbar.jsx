@@ -4,14 +4,19 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
+import HamburgerDrawer from "../AnimatedSidebar/HamurgerDrawer"
+
 export default function Topbar() {
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   return (
     <div className="topbarContainer">
+      <div className="menu">
+        <HamburgerDrawer/>
+      </div>
       <div className="topbarLeft">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">Lamasocial</span>
+          <span className="logo">my news</span>
         </Link>
       </div>
       <div className="topbarCenter">
