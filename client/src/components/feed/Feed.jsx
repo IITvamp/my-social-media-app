@@ -4,61 +4,43 @@ import Share from "../share/Share";
 import "./feed.css";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import useFetch from "../../customHook/useFetch"
 
 export default function Feed({ username }) {
-  const [query, setQuery] = useState("");
+  
   const [page, setPage] = useState(1);
-  const { loading, error, list } = useFetch(query, page);
-  const loader = useRef(null);
+  
   const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
 
-  const handleChange = (e) => {
-    setQuery(e.target.value);
-  };
-
-  const handleObserver = useCallback((entries) => {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      setPage((prev) => prev + 1);
-    }
-  }, []);
-
   useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: "20px",
-      threshold: 0,
-    };
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) observer.observe(loader.current);
-  }, [handleObserver]);
-
-
-  useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPosts = async (size = 8) => {
       const res = username
         ? await axios.get("/posts/profile/" + username)
         : await axios.get("posts/timeline/" + user._id);
-      setPosts(
-        res.data.sort((p1, p2) => {
-          return new Date(p2.createdAt) - new Date(p1.createdAt);
-        })
-      );
+        // : await axios.get(`/posts/myposts?page=${page}&size=${size}`);
+      
+      await res.data.sort((p1, p2) => {
+        return new Date(p2.createdAt) - new Date(p1.createdAt);
+      });
+      setPosts(res.data);
     };
     fetchPosts();
   }, [username, user._id]);
 
   return (
-    <div className="feed">
-      <div className="feedWrapper">
-        {(!username || username === user.username) && <Share />}
-        {posts.map((p) => (
-          <Post key={p._id} post={p} />
-        ))}
-      </div>
+    // <InfiniteScroll
+    //   dataLength={posts.length}
+    //   next={() => setPage((page) => page + 1)}
+    //   hasMore={true}
+    // >
+    <div>
+      <Share/>
+      {posts.map((p) => (
+        <Post key={p._id} post={p} />
+      ))}
     </div>
+    // </InfiniteScroll>
   );
 }

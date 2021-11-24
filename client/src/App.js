@@ -23,6 +23,9 @@ function App() {
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}
         </Route>
+        <Route path="/newPost">
+          {user ? <Redirect to="/" /> : <Register />}
+        </Route>
         <Route path="/profile/:username">
           <Profile />
         </Route>

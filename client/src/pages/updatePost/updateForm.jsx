@@ -1,60 +1,57 @@
-import "./share.css";
-import {
-  PermMedia,
-  Cancel,
-} from "@material-ui/icons";
+
+import { PermMedia, Cancel } from "@material-ui/icons";
 
 import { useContext, useRef, useState } from "react";
+import { Grid } from "@material-ui/core"
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 
-export default function Share() {
+export default function UpdatePost(post) {
   const { user } = useContext(AuthContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  // const desc = useRef();
-  // const title = useRef();
-  // const url = useRef();
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [url, setUrl] = useState("/");
-  const [tags, setTags] = useState([]);
-  const [file, setFile] = useState(null);
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    
+  const [title, setTitle] = useState(post.title);
+  const [desc, setDesc] = useState(post.desc);
+  const [url, setUrl] = useState(post.url);
+  const [tags, setTags] = useState(post.tags);
+  const [file, setFile] = useState(post.img);
 
   const handleAddChip = (chip) => {
     setTags([...tags, chip]);
   };
 
   const handleDeleteChip = (chipToDelete) => {
-    setTags(tags.filter((chip) => chip !== chipToDelete),);};
+    setTags(tags.filter((chip) => chip !== chipToDelete));
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const newPost = {
-      userId: user._id,
-      desc: desc,
-      title: title,
-      url: url,
-      tags: tags.sp
-    };
+      post.title = title;
+      post.desc = desc;
+      post.img = file;
+      post.url = url;
+      post.tags = tags;
+      
     if (file) {
       const data = new FormData();
       const fileName = Date.now() + file.name;
       data.append("name", fileName);
       data.append("file", file);
-      newPost.img = fileName;
-      console.log(newPost);
+      post.img = fileName;
+      console.log(post);
       try {
         await axios.post("/upload", data);
       } catch (err) {}
     }
     try {
-      await axios.post("/posts", newPost);
+      await axios.put("/posts" + post._id);
       window.location.reload();
     } catch (err) {}
   };
 
-  return (
+    return (
+      
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">

@@ -8,10 +8,10 @@ function useFetch(query, page) {
 
   const sendQuery = useCallback(async () => {
     try {
-      await setLoading(true);
-      await setError(false);
+      setLoading(true);
+      setError(false);
       const res = await axios.get("/paginatedpost");
-      await setList((prev) => [...prev, ...res.data])
+      setList((prev) => [...prev, ...res.data])
       setLoading(false);
     } catch (err) {
       setError(err);

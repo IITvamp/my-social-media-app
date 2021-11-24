@@ -3,7 +3,6 @@ const Post = require("../models/Post");
 const User = require("../models/User");
 
 //create a post
-
 router.post("/", async (req, res) => {
   const newPost = new Post(req.body);
   try {
@@ -13,8 +12,8 @@ router.post("/", async (req, res) => {
     res.status(500).json(err.message);
   }
 });
-//update a post
 
+//update a post
 router.put("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -33,6 +32,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    await post.deleteOne();
     if (post.userId === req.body.userId) {
       await post.deleteOne();
       res.status(200).json("the post has been deleted");
@@ -72,28 +72,22 @@ router.get("/:id", async (req, res) => {
 });
 
 //get paginated post
-router.get("/paginatedposts", async (req, res) => {
-  const { page } = req.query;
-
+router.get("/myposts", async (req, res) => {
   try {
-    const LIMIT = 10;
-    const startIndex = (Number(page) - 1) * LIMIT; // get the starting index of every page
-
-    const total = await Post.countDocuments({});
-    const posts = await Post.find()
-      .sort({ _id: -1 })
-      .limit(LIMIT)
-      .skip(startIndex);
-
-    res.status(200).json({posts});
+    const size = Number(req.query.size);
+    const skip = Number(req.query.page);
+    console.log(size, skip)
+    const data = await News.find({}).limit(size).skip(size * skip);
+    // console.log(data.count());
+    response.status(200).json(data);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    console.log(error);
+    response.status(500).json(error);
   }
 }
-)
+);
 
 //get timeline posts
-
 router.get("/timeline/:userId", async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
@@ -110,7 +104,6 @@ router.get("/timeline/:userId", async (req, res) => {
 });
 
 //get user's all posts
-
 router.get("/profile/:username", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
@@ -118,6 +111,24 @@ router.get("/profile/:username", async (req, res) => {
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+
+//get posts by search
+router.get("/search", async (req, res) => {
+  const { searchQuery, tags } = req.query;
+
+  try {
+    const title = new RegExp(searchQuery, "i");
+
+    const posts = await PostMessage.find({
+      $or: [{ title }, { tags: { $in: tags.split(",") } }],
+    });
+
+    res.json({ data: posts });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 });
 

@@ -144,6 +144,14 @@
   color: #44444d;
 }
 
+.tagWindow{
+  background-color: aqua;
+  overflow-y: scroll;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+}
+
 @media (max-width: 800px) {
   .newsCard {
     flex-direction: column;
