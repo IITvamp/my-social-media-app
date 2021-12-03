@@ -60,6 +60,7 @@ router.put("/:id/like", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 //get a post
 
 router.get("/:id", async (req, res) => {
@@ -116,17 +117,15 @@ router.get("/profile/:username", async (req, res) => {
 
 
 //get posts by search
-router.get("/search", async (req, res) => {
-  const { searchQuery, tags } = req.query;
-
+router.get("/search/:tags", async (req, res) => {
+  const tags = req.params.tags;
+  console.log(tags);
   try {
-    const title = new RegExp(searchQuery, "i");
-
-    const posts = await PostMessage.find({
-      $or: [{ title }, { tags: { $in: tags.split(",") } }],
+    const posts = await Post.find({
+       tags: { $in: [tags]},
     });
 
-    res.json({ data: posts });
+    res.json(posts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

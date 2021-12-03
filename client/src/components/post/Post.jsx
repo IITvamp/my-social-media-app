@@ -1,4 +1,5 @@
 import "./post.css";
+import { useParams, useLocation } from "react-router-dom";
 
 
 import {
@@ -20,7 +21,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Chip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-// import Button from "@material-ui/core/Button";
+
 const useStyles = makeStyles((theme) => ({
   newsCard: {
     width: "70%",
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "40px",
     fontSize: "20px",
     lineHeight: 1.2,
+    cursor: "pointer",
   },
   description: {
     marginTop: 10,
@@ -78,6 +80,9 @@ export default function Post({ post }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user: currentUser } = useContext(AuthContext);
 
+    const location = useLocation();
+
+
   useEffect(() => {
     setIsLiked(post.likes.includes(currentUser._id));
   }, [currentUser._id, post.likes]);
@@ -89,6 +94,10 @@ export default function Post({ post }) {
     };
     fetchUser();
   }, [post.userId]);
+
+  useEffect(() => {
+    console.log(post.tags);
+  }, [post])
 
   const likeHandler = () => {
     try {
@@ -110,6 +119,7 @@ export default function Post({ post }) {
 
   const classes = useStyles();
 
+
   return (
     <>
       <Card className={classes.newsCard}>
@@ -130,11 +140,12 @@ export default function Post({ post }) {
           title={user.username}
           subheader={format(post.createdAt)}
         ></CardHeader>
-        {post.userId === currentUser._id && (
-          <IconButton color="primary" onClick={deleteHandler}>
-            <DeleteIcon/>
-          </IconButton>
-        )}
+        {post.userId === currentUser._id &&
+          !location.pathname.startsWith("/post") && (
+            <IconButton color="primary" onClick={deleteHandler}>
+              <DeleteIcon />
+            </IconButton>
+          )}
         <CardContent className={classes.cardContent}>
           <Grid container>
             <Grid item lg={5} md={5} sm={5} xs={12}>
@@ -157,9 +168,18 @@ export default function Post({ post }) {
               xs={12}
               className={classes.rightContainer}
             >
-              <Typography container className={classes.title}>
-                {post?.title}
-              </Typography>
+              <Link to={`/post/${post._id}`}>
+                <Typography
+                  container
+                  className={classes.title}
+                  onClick={() =>
+                    console.log(`you clicked on post with title ${post?.title}`)
+                  }
+                >
+                  {post?.title}
+                </Typography>
+              </Link>
+
               <Typography className={classes.description}>
                 {post?.desc}
               </Typography>
@@ -175,12 +195,12 @@ export default function Post({ post }) {
             <Grid container={"true"} item>
               <Grid item={"true"} lg={12} style={{ height: "30px" }}>
                 {/* <Stack direction="row" spacing={1}> */}
-                {post.tags.map((chip) => {
+                {(post?.tags.length > 0) && post.tags.map((chip) => {
                   return (
                     <>
-                      {/* <p>{chip} </p> */}
-                      {/* {console.log(chip)} */}
-                      <Chip label={chip} />
+                      <Link to={`/tags/${chip}`}>
+                        <Chip label={chip} />
+                      </Link>
                     </>
                   );
                 })}

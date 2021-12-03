@@ -32,6 +32,9 @@ const useStyles = makeStyles({
     height: 36,
     width: 36,
   },
+  chatIcon: {
+    
+  },
 });
 export default function TopBar() {
   const classes = useStyles();
@@ -44,6 +47,9 @@ export default function TopBar() {
           <HamburgerDrawer />
           <Link to={`/`} className={classes.logolink}>
             <img src={inshortsLogo} alt="logo" className={classes.logoImage} />
+          </Link>
+          <Link to={`/chat`}>
+            <Chat className={classes.chatIcon} />
           </Link>
           <Link to={`/profile/${user.username}`}>
             <Avatar

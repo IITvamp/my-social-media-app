@@ -2,6 +2,8 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
+import DetailPage from "./pages/PostExplainaition/PostExplainaition";
+import SearchPage from "./pages/search/search";
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +31,13 @@ function App() {
         <Route path="/profile/:username">
           <Profile />
         </Route>
+        <Route path="/post/:postId">
+          <DetailPage />
+        </Route>
+        <Route path="/tags/:tags">
+          <SearchPage />
+        </Route>
+        <Route path="/chat">{user ? <Home /> : <Register />}</Route>
       </Switch>
     </Router>
   );

@@ -6,17 +6,16 @@ const CommentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    userId: {
+    user: {
       type: String,
       required: true,
     },
-    desc: {
+    content: {
       type: String,
       max: 100,
     },
-    replies: {
-        type:Array,
-      default: [],
+    responseTo: {
+      type: String,
     },
     upVotes: {
       type: Array,

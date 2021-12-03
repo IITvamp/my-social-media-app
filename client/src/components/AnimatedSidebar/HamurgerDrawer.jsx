@@ -6,11 +6,10 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-// import InboxIcon from "@material-ui/icons/MoveToInbox";
-// import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu"; // added
+
+import {Link} from "react-router-dom"
 
 import {
   createMuiTheme,
@@ -19,12 +18,8 @@ import {
 } from "@material-ui/core"; // added
 
 
-//"All News",
-//   "business",
-//   "Technology",
   const categories = [
-  "All News",
-  "business",
+  "Business",
   "Technology",
   "All News",
   "business",
@@ -98,14 +93,16 @@ export default function SwipeableTemporaryDrawer({ setCategory }) {
       <Divider />
       <List>
         {categories.map((text, index) => (
-          <ListItem
-            style={{ height: 40, borderRadius: 3 }}
-            button
-            onClick={() => setCategory(text)}
-            key={text}
-          >
-            <ListItemText primary={text} />
-          </ListItem>
+          <Link to={`tags/${text}`}>
+            <ListItem
+              style={{ height: 40, borderRadius: 3 }}
+              button
+              // onClick={() => setCategory(text)}
+              key={text}
+            >
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>

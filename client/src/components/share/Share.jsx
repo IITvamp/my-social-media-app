@@ -12,9 +12,6 @@ import ChipInput from "material-ui-chip-input";
 export default function Share() {
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  // const desc = useRef();
-  // const title = useRef();
-  // const url = useRef();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [url, setUrl] = useState("/");
@@ -35,8 +32,9 @@ export default function Share() {
       desc: desc,
       title: title,
       url: url,
-      tags: tags.sp
+      tags: tags,
     };
+    
     if (file) {
       const data = new FormData();
       const fileName = Date.now() + file.name;
