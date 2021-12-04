@@ -9,15 +9,15 @@ const UserSchema = new mongoose.Schema(
       max: 20,
       unique: true,
     },
+    googleId: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
       max: 50,
       unique: true,
-    },
-    password: {
-      type: String,
-      min: 6,
     },
     profilePicture: {
       type: String,

@@ -4,6 +4,7 @@ import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import DetailPage from "./pages/PostExplainaition/PostExplainaition";
 import SearchPage from "./pages/search/search";
+import ChatBox from "./components/ChatBox/ChatBox";
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,7 +38,7 @@ function App() {
         <Route path="/tags/:tags">
           <SearchPage />
         </Route>
-        <Route path="/chat">{user ? <Home /> : <Register />}</Route>
+        <Route path="/chat">{user ? <ChatBox /> : <Register />}</Route>
       </Switch>
     </Router>
   );

@@ -194,98 +194,22 @@ export default function Post({ post }) {
 
             <Grid container={"true"} item>
               <Grid item={"true"} lg={12} style={{ height: "30px" }}>
-                {/* <Stack direction="row" spacing={1}> */}
+                
                 {(post?.tags.length > 0) && post.tags.map((chip) => {
                   return (
                     <>
                       <Link to={`/tags/${chip}`}>
-                        <Chip label={chip} />
+                        <Chip label={chip} className={classes.chip} />
                       </Link>
                     </>
                   );
                 })}
-                {/* </Stack> */}
+                
               </Grid>
             </Grid>
           </Grid>
         </CardContent>
       </Card>
     </>
-
-    // <div className="post">
-    //   <div className="postWrapper">
-    //     <div className="postTop">
-    //       <div className="postTopLeft">
-    //         <Link to={`/profile/${user.username}`}>
-    //           <img
-    //             className="postProfileImg"
-    //             src={
-    //               user.profilePicture
-    //                 ? PF + user.profilePicture
-    //                 : PF + "person/noAvatar.png"
-    //             }
-    //             alt=""
-    //           />
-    //           <span className="postUsername">{user.username}</span>
-    //         </Link>
-    //         <span className="postDate">{format(post.createdAt)}</span>
-    //       </div>
-    //       <div className="postTopRight">
-    //         <MoreVert />
-    //       </div>
-    //     </div>
-
-    //     <div className="newsCard">
-    //       <img
-    //         alt={"it's something"}
-    //         src={
-    //           PF + post.img
-    //             ? PF + post.img
-    //             : "http://www.aaru.edu.jo/websites/aaru2/wp-content/plugins/learnpress/assets/images/no-image.png?Mobile=1&Source=%2F%5Flayouts%2Fmobile%2Fdispform%2Easpx%3FList%3D78b536db%252De7c7%252D45d9%252Da661%252Ddb2a2aa2fbaf%26View%3D6efc759a%252D0646%252D433c%252Dab6e%252D2f027ffe0799%26RootFolder%3D%252Fwebsites%252Faaru2%252Fwp%252Dcontent%252Fplugins%252Flearnpress%252Fassets%252Fimages%26ID%3D4786%26CurrentPage%3D1"
-    //         }
-    //         className="newsImage"
-    //       />
-    //       <div className="newsText">
-    //         <div>
-    //           <span className="title">{post?.title}</span>
-    //           <br />
-    //         </div>
-    //         <div className="lowerNewsText">
-    //           <div className="description">{post?.desc}</div>
-    //           <span className="readmore">
-    //             read more at{" "}
-    //             <a href={post?.url} target="__blank" className="source">
-    //               <b>{"hahahah"}</b>
-    //             </a>
-    //           </span>
-    //           <div className="tagWindow">
-    //             {post.tags.map((chip) => {
-    //               return (
-    //                 <p>{chip} </p>
-    //                 // <Chip label={chip} onClick={console.log(`clicked on chip ${chip}`) }/>
-    //               );
-    //             })}
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-
-    //     {/*  */}
-    //     <div className="postBottom">
-    //       <div className="postBottomLeft">
-    //         <img
-    //           className="likeIcon"
-    //           src={`${PF}heart.png`}
-    //           onClick={likeHandler}
-    //           alt=""
-    //         />
-    //         <span className="postLikeCounter">{like} people like it</span>
-    //       </div>
-    //       <div className="postBottomRight">
-    //         <span className="postCommentText">{post.comment} comments</span>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }

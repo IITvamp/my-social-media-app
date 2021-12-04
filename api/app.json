@@ -1,0 +1,12 @@
+{
+  "env": {
+    "PORT": {
+      "description": "PORT on whih app is gonna run",
+      "value": "5050"
+    },
+    "MONGO_URL":{
+      "description": "mongodb url",
+      "value": "mongodb+srv://User1:user123@cluster0.zbqd2.mongodb.net/socialmediadatabase?retryWrites=true&w=majority"
+    }
+  }
+}
