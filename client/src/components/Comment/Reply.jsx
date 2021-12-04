@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   panel: {},
 }));
 
-export const Reply = (props) => {
+export default function Reply(){
   const [text, setText] = useState("");
   const classes = useStyles();
   return (

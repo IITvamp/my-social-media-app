@@ -3,6 +3,7 @@ import {
     Box, Typography, makeStyles
 } from '@material-ui/core';
 
+import Reply from './Reply';
 
 const useStyles = makeStyles((theme) => ({
   CommentBox: {
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
 export default function CommentBox() {
     const classes = useStyles();
     return (
-      <>
+        <>
+            <Reply></Reply>
         <Box className={classes.CommentBox}>
           <Typography classname={classes.commentspan}>Comments</Typography>
           <Typography classname={classes.commentscountpan}>9</Typography>
