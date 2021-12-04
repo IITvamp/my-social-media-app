@@ -9,6 +9,7 @@ import {
   CardContent,
   Grid,
   Typography,
+  Box,
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -123,23 +124,25 @@ export default function Post({ post }) {
   return (
     <>
       <Card className={classes.newsCard}>
-        <CardHeader
-          avatar={
-            <Link to={`/profile/${user.username}`}>
-              <Avatar
-                aria-label="news card"
-                src={
-                  user.profilePicture
-                    ? PF + user.profilePicture
-                    : PF + "person/noAvatar.png"
-                }
-                alt=""
-              ></Avatar>
-            </Link>
-          }
-          title={user.username}
-          subheader={format(post.createdAt)}
-        ></CardHeader>
+        <Box>
+          <CardHeader
+            avatar={
+              <Link to={`/profile/${user.username}`}>
+                <Avatar
+                  aria-label="news card"
+                  src={
+                    user.profilePicture
+                      ? PF + user.profilePicture
+                      : PF + "person/noAvatar.png"
+                  }
+                  alt=""
+                ></Avatar>
+              </Link>
+            }
+            title={user.username}
+            subheader={format(post.createdAt)}
+          ></CardHeader>
+        </Box>
         {post.userId === currentUser._id &&
           !location.pathname.startsWith("/post") && (
             <IconButton color="primary" onClick={deleteHandler}>
@@ -195,15 +198,16 @@ export default function Post({ post }) {
             <Grid container={"true"} item>
               <Grid item={"true"} lg={12} style={{ height: "30px" }}>
                 {/* <Stack direction="row" spacing={1}> */}
-                {(post?.tags.length > 0) && post.tags.map((chip) => {
-                  return (
-                    <>
-                      <Link to={`/tags/${chip}`}>
-                        <Chip label={chip} />
-                      </Link>
-                    </>
-                  );
-                })}
+                {post?.tags.length > 0 &&
+                  post.tags.map((chip) => {
+                    return (
+                      <>
+                        <Link to={`/tags/${chip}`}>
+                          <Chip label={chip} />
+                        </Link>
+                      </>
+                    );
+                  })}
                 {/* </Stack> */}
               </Grid>
             </Grid>

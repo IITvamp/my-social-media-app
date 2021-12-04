@@ -4,6 +4,7 @@ import Axios from "axios";
 
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect } from "react";
+import CommentBox from './CommentBox'
 
 const { TextArea } = Input;
 function SingleComment(props) {
@@ -36,13 +37,6 @@ function SingleComment(props) {
         setCommentValue("");
         setOpenReply(!OpenReply);
         props.refreshFunction(response.data);
-    //   if (response.data.success) {
-    //     setCommentValue("");
-    //     setOpenReply(!OpenReply);
-    //     props.refreshFunction(response.data.result);
-    //   } else {
-    //     alert("Failed to save Comment");
-    //   }
     });
   };
 
@@ -54,6 +48,7 @@ function SingleComment(props) {
 
   return (
     <div>
+      <CommentBox/>
       <Comment
         actions={actions}
         author={props.comment.user.username}
