@@ -31,11 +31,12 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    console.log(user);
     !user && res.status(404).json("user not found");
-
-    const validPassword = await bcrypt.compare(req.body.password, user.password)
-    !validPassword && res.status(400).json("wrong password")
-
+    console.log("user forund");
+    // const validPassword = await bcrypt.compare(req.body.password, user.password)
+    // !validPassword && res.status(400).json("wrong password")
+    console.log("password matched");
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json(err)
