@@ -22,7 +22,7 @@ export default function Register() {
   }
 
   const loginFailure = () => {
-    console.log("Login success");
+    console.log("Login failure");
   };
 
   const handleClick = async (e) => {
