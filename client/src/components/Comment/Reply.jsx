@@ -9,9 +9,18 @@ import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   replybox: {
+    width: "100%",
     borderRadius: 8,
     border: "solid 1px #3d4953",
     overflow: "hidden",
+  },
+  textbox: {
+    width: "100%",
+    boxSizing: "border-box",
+    backgroundColor: "#13181d",
+    padding: 8,
+    color: "#cccccc",
+    border:'none',
   },
   panel: {},
 }));
@@ -28,7 +37,8 @@ export default function Reply(){
           value={text}
           onChange={(value) => {
             setText(value.target.value);
-          }}
+                  }}
+                  className={classes.textbox}
         />
               <Box className={classes.panel}>
                   <Box>
