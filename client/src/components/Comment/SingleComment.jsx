@@ -5,6 +5,9 @@ import Axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect } from "react";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
+
+
 const { TextArea } = Input;
 function SingleComment(props) {
   const [CommentValue, setCommentValue] = useState("");
@@ -32,7 +35,7 @@ function SingleComment(props) {
       content: CommentValue,
     };
 
-      Axios.post("/comment/saveComment", variables).then((response) => {
+      Axios.post(url + "/comment/saveComment", variables).then((response) => {
         setCommentValue("");
         setOpenReply(!OpenReply);
         props.refreshFunction(response.data);

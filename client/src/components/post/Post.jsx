@@ -22,6 +22,9 @@ import { AuthContext } from "../../context/AuthContext";
 import { Chip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
+
+
 const useStyles = makeStyles((theme) => ({
   newsCard: {
     width: "70%",
@@ -89,7 +92,7 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await axios.get(url + `/users?userId=${post.userId}`);
       setUser(res.data);
     };
     fetchUser();
@@ -101,7 +104,7 @@ export default function Post({ post }) {
 
   const likeHandler = () => {
     try {
-      axios.put("/posts/" + post._id + "/like", { userId: currentUser._id });
+      axios.put(url + "/posts/" + post._id + "/like", { userId: currentUser._id });
     } catch (err) {}
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
@@ -109,7 +112,7 @@ export default function Post({ post }) {
 
   const deleteHandler = () => {
     try {
-      axios.delete("/posts/" + post._id);
+      axios.delete(url + "/posts/" + post._id);
       console.log(`post deleted with id ${post._id}`);
       window.location.reload();
     } catch (error) {

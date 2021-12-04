@@ -7,6 +7,9 @@ import ReplyComment from "./ReplyComment"
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect } from "react";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
+
+
 const { TextArea } = Input;
 
 function Comments(props) {
@@ -28,7 +31,7 @@ function Comments(props) {
     };
       console.log(newComment);
       try {
-        const res = await axios.post("/comment/saveComment", newComment);
+        const res = await axios.post(url + "/comment/saveComment", newComment);
           setComment("");
         props.refreshFunction(res.data);
       } catch(e) {

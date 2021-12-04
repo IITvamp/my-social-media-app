@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export default function Feed({ username }) {
   
@@ -17,8 +18,8 @@ export default function Feed({ username }) {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = username
-        ? await axios.get("/posts/profile/" + username)
-        : await axios.get("posts/timeline/" + user._id);
+        ? await axios.get(url + "/posts/profile/" + username)
+        : await axios.get(url + "posts/timeline/" + user._id);
         // : await axios.get(`/posts/myposts?page=${page}&size=${size}`);
       
       await res.data.sort((p1, p2) => {

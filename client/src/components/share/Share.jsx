@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 import { Chip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -118,11 +119,11 @@ export default function Share() {
       newPost.img = fileName;
       console.log(newPost);
       try {
-        await axios.post("/upload", data);
+        await axios.post(url + "/upload", data);
       } catch (err) {}
     }
     try {
-      await axios.post("/posts", newPost);
+      await axios.post(url + "/posts", newPost);
       window.location.reload();
     } catch (err) {}
   };

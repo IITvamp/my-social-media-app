@@ -4,6 +4,7 @@ import "./register.css";
 import { useHistory } from "react-router";
 import { GoogleLogin } from "react-google-login";
 
+const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export default function Register() {
   const username = useRef();
@@ -35,7 +36,7 @@ export default function Register() {
         password: password.current.value,
       };
       try {
-        await axios.post("/auth/register", user);
+        await axios.post(url + "/auth/register", user);
         history.push("/login");
       } catch (err) {
         console.log(err);
