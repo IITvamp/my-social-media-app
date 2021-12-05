@@ -89,13 +89,14 @@ const useStyles = makeStyles((theme) => ({
 
 async function CommentCard  (props) {
   const [CommentValue, setCommentValue] = useState("");
+    // const [commentuser, setCommentuser] = useState({username:"ayush"});
+
   const [OpenReply, setOpenReply] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
   const { user } = useContext(AuthContext);
 
-  const commentuser = await Axios.get(`users/${comment.user}`);
 
   useEffect(() => {
     if (CommentValue !== "") {
@@ -108,6 +109,13 @@ async function CommentCard  (props) {
   const classes = useStyles();
 
   const comment = props.comment;
+
+  // useEffect(async () => {
+  //   console.log(comment.user);
+  //  const commentuser = await Axios.get(`users/${comment.user}`);
+  //   setCommentuser(commentuser);
+  // }, [comment]);
+
 
   const handleChange = (e) => {
     setCommentValue(e.currentTarget.value);
@@ -143,8 +151,8 @@ async function CommentCard  (props) {
       <Box className={classes.rightContaier}>
         <Box className={classes.top}>
           <Typography className={classes.commentUser}>
-            <Link to={`/profile/${commentuser.username}`}>
-              {commentuser.username}
+            <Link to={`/profile/ayush`}>
+              {"ayush"}
             </Link>
           </Typography>
           <Typography className={classes.date}>14 min from now</Typography>
