@@ -88,13 +88,13 @@ export default function Post({ post }) {
     setIsLiked(post.likes.includes(currentUser._id));
   }, [currentUser._id, post.likes]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
-      setUser(res.data);
-    };
-    fetchUser();
-  }, [post.userId]);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const res = await axios.get(`/users?userId=${post.userId}`);
+  //     setUser(res.data);
+  //   };
+  //   fetchUser();
+  // }, [post.userId]);
 
   useEffect(() => {
     console.log(post.tags);

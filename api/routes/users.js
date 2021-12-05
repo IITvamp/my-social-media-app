@@ -41,16 +41,16 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a user
-router.get("/:userId/", async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const user = await User.findById(userId)
-    const { password, updatedAt, ...other } = user._doc;
-    res.status(200).json(other);
-  } catch (err) {
-    res.status(500).json(err.message);
-  }
-});
+// router.get("/:userId/", async (req, res) => {
+//   const userId = req.params.userId;
+//   try {
+//     const user = await User.findById(userId)
+//     const { password, updatedAt, ...other } = user._doc;
+//     res.status(200).json(other);
+//   } catch (err) {
+//     res.status(500).json(err.message);
+//   }
+// });
 
 //get a user
 router.get("/", async (req, res) => {
