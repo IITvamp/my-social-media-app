@@ -95,7 +95,7 @@ async function CommentCard  (props) {
 
   const { user } = useContext(AuthContext);
 
-  const commentuser =  await Axios.get("")
+  const commentuser = await Axios.get(`users/${comment.user}`);
 
   useEffect(() => {
     if (CommentValue !== "") {
@@ -142,9 +142,10 @@ async function CommentCard  (props) {
 
       <Box className={classes.rightContaier}>
         <Box className={classes.top}>
-
           <Typography className={classes.commentUser}>
-            <Link to="/profile/ayush">{"ayush"}</Link>
+            <Link to={`/profile/${commentuser.username}`}>
+              {commentuser.username}
+            </Link>
           </Typography>
           <Typography className={classes.date}>14 min from now</Typography>
           <Box className={classes.content}>{comment.content}</Box>
@@ -177,7 +178,13 @@ async function CommentCard  (props) {
                   </Link>
                 </Typography>
                 <Box classname={classes.submitbutton}>
-                  <Button disabled={disabled} classname={classes.submitbutton} onClick={onSubmit}>Comment</Button>
+                  <Button
+                    disabled={disabled}
+                    classname={classes.submitbutton}
+                    onClick={onSubmit}
+                  >
+                    Comment
+                  </Button>
                 </Box>
               </Box>
             </Box>
