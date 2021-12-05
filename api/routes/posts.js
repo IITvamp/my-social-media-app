@@ -93,11 +93,9 @@ router.get("/timeline/:userId", async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId);
     const userPosts = await Post.find();
-    // const friendPosts = await Promise.all(
-    //   currentUser.followings.map((friendId) => {
-    //     return Post.find({ userId: friendId });
-    //   })
-    // );
+    await userPosts.sort((p1, p2) => {
+      return new Date(p2.createdAt) - new Date(p1.createdAt);
+    });
     res.status(200).json(userPosts);
   } catch (err) {
     res.status(500).json(err);

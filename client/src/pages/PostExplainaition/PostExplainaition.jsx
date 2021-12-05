@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 import Comments from "../../components/Comment/Comment"
+// import Comment from "../../components/Comment/modifyComment/Comment";
+// import CommentBox from "../../components/Comment/modifyComment/CommentBox";
+
 
 
 export default function DetailPage() {
     const [post, setPost] = useState({ likes: [], tags: [] });
     const [CommentLists, setCommentLists] = useState([]);
     const postId = useParams().postId;
-    console.log(postId);
+  console.log(postId);
 
     useEffect(() => {
         console.log("useEffect called");
@@ -45,6 +48,7 @@ export default function DetailPage() {
       <>
         <Topbar />{console.log(post)}
         <Post key={postId} post={post} />;
+        
         <Comments
           CommentLists={CommentLists}
           postId={postId}

@@ -17,11 +17,11 @@ const CommentSchema = new mongoose.Schema(
     responseTo: {
       type: String,
     },
-    upVotes: {
+    upvotes: {
       type: Array,
       default: [],
     },
-    downVotes: {
+    downvotes: {
       type: Array,
       default: [],
     },

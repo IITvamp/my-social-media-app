@@ -24,15 +24,19 @@ const PostSchema = new mongoose.Schema(
     },
     tags: {
       type: [String],
-      default:"",
+      default: "",
     },
-    likes: {
+    upvotes: {
+      type: Array,
+      default: [],
+    },
+    downvotes: {
       type: Array,
       default: [],
     },
     comments: {
       type: Array,
-      default:[],
+      default: [],
     },
   },
   { timestamps: true }
