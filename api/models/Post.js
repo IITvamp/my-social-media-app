@@ -26,6 +26,10 @@ const PostSchema = new mongoose.Schema(
       type: [String],
       default: "",
     },
+    likes: {
+      type: Array,
+      default: [],
+    },
     upvotes: {
       type: Array,
       default: [],

@@ -3,10 +3,7 @@ import Post from "../../components/post/Post";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
-import Comments from "../../components/Comment/Comment"
-// import Comment from "../../components/Comment/modifyComment/Comment";
-// import CommentBox from "../../components/Comment/modifyComment/CommentBox";
-
+import Comments from "../../components/Comment/Comment";
 
 
 export default function DetailPage() {
@@ -15,9 +12,7 @@ export default function DetailPage() {
     const postId = useParams().postId;
   console.log(postId);
 
-    useEffect(() => {
-        console.log("useEffect called");
-        
+    useEffect(() => {        
       const fetchPost = async () => {
         const res = await axios.get(`/posts/${postId}`);
         setPost(res.data);
@@ -26,18 +21,22 @@ export default function DetailPage() {
         };
         
       fetchPost();
-      console.log("fetchPost called ");
     }, [postId]);
 
-    useEffect(() => {
-      const fetchComments = async () => {
-        console.log("fetch comment called");
-        const res = await axios.get("/comment/getComment/" + postId);
-        setCommentLists(res.data);
-        console.log(res);
-      };
-      fetchComments();
-      console.log("fetch comment called");
+  useEffect(() => {
+    try {
+         const fetchComments = async () => {
+           console.log("fetch comment called");
+           const res = await axios.get("/comment/getComment/" + postId);
+           console.log(res.data);
+           setCommentLists(CommentLists.concat(res.data));
+           console.log(res);
+           fetchComments();
+         };
+      } catch (error) {
+        console.log(error);
+        alert(error);
+      }
     }, [postId]);
 
     const updateComment = (newComment) => {

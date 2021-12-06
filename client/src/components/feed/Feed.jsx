@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
-export default function Feed({ username }) {
+export default function Feed({ userId }) {
   
   const [page, setPage] = useState(1);
   
@@ -16,18 +16,19 @@ export default function Feed({ username }) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = username
-        ? await axios.get("/posts/profile/" + username)
+      console.log(userId)
+      const res = userId
+        ? await axios.get("/posts/profile/" + userId)
         : await axios.get("posts/timeline/" + user._id);
-        // : await axios.get(`/posts/myposts?page=${page}&size=${size}`);
       
-      await res.data.sort((p1, p2) => {
-        return new Date(p2.createdAt) - new Date(p1.createdAt);
-      });
+      // await res.data.sort((p1, p2) => {
+      //   return new Date(p2.createdAt) - new Date(p1.createdAt);
+      // });
       setPosts(res.data);
+      console.log(res.data);
     };
     fetchPosts();
-  }, [username, user._id]);
+  }, [userId, user._id]);
 
   return (
     // <InfiniteScroll

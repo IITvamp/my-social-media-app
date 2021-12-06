@@ -13,6 +13,8 @@ import {
 
 } from "@material-ui/core";
 
+import EditIcon from "@material-ui/icons/Edit";
+
 import { Link } from "react-router-dom";
 import Rating from "./modifyComment/Rating";
 
@@ -39,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-block",
     color: "#53626f",
     marginLeft: 10,
+  },
+  editButton: {
+    display: "inline-block",
+    color: "#53626f",
   },
   content: {
     color: "#cccccc",
@@ -89,7 +95,9 @@ const useStyles = makeStyles((theme) => ({
 
 async function CommentCard  (props) {
   const [CommentValue, setCommentValue] = useState("");
+  const [content, setContent] = useState("");
     // const [commentuser, setCommentuser] = useState({username:"ayush"});
+  const [updating, setupdating] = useState(false);
 
   const [OpenReply, setOpenReply] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -116,14 +124,42 @@ async function CommentCard  (props) {
   //   setCommentuser(commentuser);
   // }, [comment]);
 
-
+  const editiconclickhandler = () => {
+    setupdating(!updating);
+    setContent(comment);
+}
   const handleChange = (e) => {
     setCommentValue(e.currentTarget.value);
+  };
+
+  const handleUpdateChange = (e) => {
+    setContent(e.currentTarget.value);
+    setCommentValue(e.currentTarget.value);
+
   };
 
   const openReply = () => {
     setOpenReply(!OpenReply);
   };
+
+   const onUpdate = (e) => {
+     e.preventDefault();
+     setCommentValue(content);
+
+     const updatevariables = {
+       user: user._id,
+       postId: props.postId,
+       responseTo: props.comment._id,
+       content: CommentValue,
+     };
+
+     Axios.put("/comment/saveComment", updatevariables).then((response) => {
+       setupdating(!updating);
+       setCommentValue("");
+      setContent(CommentValue);
+       props.refreshFunction(response.data);
+     });
+   };
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -145,18 +181,53 @@ async function CommentCard  (props) {
   return (
     <Box className={classes.card}>
       <Box className={classes.ratingBox}>
-        <Rating votes={comment.votes} />
+        <Rating comment={comment} />
       </Box>
 
       <Box className={classes.rightContaier}>
         <Box className={classes.top}>
           <Typography className={classes.commentUser}>
-            <Link to={`/profile/ayush`}>
-              {"ayush"}
-            </Link>
+            <Link to={`/profile/${comment.user}`}>{"ayush"}</Link>
           </Typography>
           <Typography className={classes.date}>14 min from now</Typography>
-          <Box className={classes.content}>{comment.content}</Box>
+          <Typography className={classes.editButton}>
+            <EditIcon onClick={ editiconclickhandler }/>
+          </Typography>
+
+          {updating ? (
+            <form onSubmit={onUpdate}>
+              <>
+                <Box className={classes.replybox}>
+                  <TextareaAutosize
+                    placeholder="What are your thoughts?"
+                    minRows={2}
+                    value={content}
+                    onChange={handleUpdateChange}
+                    className={classes.textbox}
+                  />
+                  <Box className={classes.panel}>
+                    <Typography classname={classes.comment_as}>
+                      Comment as{" "}
+                      <Link to="" className={classes.username}>
+                        {user.username}
+                      </Link>
+                    </Typography>
+                    <Box classname={classes.submitbutton}>
+                      <Button
+                        disabled={disabled}
+                        classname={classes.submitbutton}
+                        onClick={onUpdate}
+                      >
+                        Comment
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </>
+            </form>
+          ) : (
+            <Box className={classes.content}>{comment.content}</Box>
+          )}
           <Typography
             onClick={() => {
               setOpenReply(openReply);

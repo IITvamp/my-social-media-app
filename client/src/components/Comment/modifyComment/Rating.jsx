@@ -1,4 +1,6 @@
 import { Box, Typography, makeStyles } from "@material-ui/core";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 
 const useStyles = makeStyles((theme) => ({
     ratingBox: {
@@ -7,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 export default function Rating(props) {
+    const comment = props.comment;
     const classes = useStyles();
     return (
         <>

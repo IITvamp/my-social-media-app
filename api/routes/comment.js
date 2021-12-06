@@ -26,7 +26,17 @@ router.get("/getComment/:postId", async (req, res) => {
         return res.status(400).send(error);
     }  
 
-  });
+});
+  
+router.put("/updateComment/:commentId", async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    await comment.updateOne({ $set: req.body });
+    res.status(200).json(comment);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
 
 
 module.exports = router;
