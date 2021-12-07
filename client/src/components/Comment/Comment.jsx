@@ -1,4 +1,5 @@
-import axios from "axios";
+import { axiosInstance } from "../../config.js";
+
 import SingleComment from "./SingleComment";
 import ReplyComment from "./ReplyComment"
 
@@ -127,7 +128,7 @@ function Comments(props) {
     };
       console.log(newComment);
       try {
-        const res = await axios.post("/comment/saveComment", newComment);
+        const res = await axiosInstance.post("/comment/saveComment", newComment);
           setComment("");
         props.refreshFunction(res.data);
       } catch(e) {

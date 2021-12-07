@@ -1,7 +1,7 @@
 import Topbar from "../../components/topbar/Topbar";
 import Post from "../../components/post/Post";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import {axiosInstance} from "../../config.js"
 import { useParams } from "react-router";
 import Comments from "../../components/Comment/Comment";
 
@@ -14,7 +14,7 @@ export default function DetailPage() {
 
     useEffect(() => {        
       const fetchPost = async () => {
-        const res = await axios.get(`/posts/${postId}`);
+        const res = await axiosInstance.get(`/posts/${postId}`);
         setPost(res.data);
         console.log(post);
         console.log("useEffect runs");
@@ -27,7 +27,7 @@ export default function DetailPage() {
     try {
          const fetchComments = async () => {
            console.log("fetch comment called");
-           const res = await axios.get("/comment/getComment/" + postId);
+           const res = await axiosInstance.get("/comment/getComment/" + postId);
            console.log(res.data);
            setCommentLists(CommentLists.concat(res.data));
            console.log(res);

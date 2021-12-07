@@ -3,7 +3,8 @@ import Topbar from "../../components/topbar/Topbar";
 
 import Feed from "../../components/feed/Feed";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../config.js";
+
 import { useParams } from "react-router";
 
 export default function Profile() {
@@ -13,7 +14,7 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${userid}`);
+      const res = await axiosInstance.get(`/users?userId=${userid}`);
       setUser(res.data);
       console.log(res.data);
     };

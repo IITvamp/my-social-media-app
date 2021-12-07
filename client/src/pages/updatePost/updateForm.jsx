@@ -3,7 +3,8 @@ import { PermMedia, Cancel } from "@material-ui/icons";
 
 import { useContext, useRef, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
+import { axiosInsInstance } from "../../config.js";
+
 import ChipInput from "material-ui-chip-input";
 import { useParams } from "react-router";
 import { useLocation } from "react-router";
@@ -98,7 +99,7 @@ export default function UpdatePost() {
 
   useEffect(() => {
     const fetchpost = async () => {
-      const res = await axios.get("/posts/" + postId);
+      const res = await axiosInsInstance.get("/posts/" + postId);
       setPost(res.data);
       console.log(res.data);
       setTitle(res.data.title);
@@ -128,12 +129,12 @@ export default function UpdatePost() {
         post.img = fileName;
         console.log(post);
         try {
-          await axios.post("/upload", data);
+          await axiosInsInstance.post("/upload", data);
         } catch (err) { }
       }
     };
     try {
-      await axios.put("/posts/" + postId, post);
+      await axiosInsInstance.put("/posts/" + postId, post);
       window.location.replace("/");
     } catch (err) {}
   };

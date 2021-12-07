@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import { axiosInstance } from "../../config.js";
 
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect } from "react";
@@ -121,7 +121,7 @@ async function CommentCard  (props) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await Axios.get(`/users?userId=${comment.user}`);
+      const res = await axiosInstance.get(`/users?userId=${comment.user}`);
       setCommentUser(res.data);
     };
     fetchUser();
@@ -157,7 +157,7 @@ async function CommentCard  (props) {
        content: CommentValue,
      };
 
-     Axios.put("/comment/saveComment", updatevariables).then((response) => {
+     axiosInstance.put("/comment/saveComment", updatevariables).then((response) => {
        setupdating(!updating);
        setCommentValue("");
       setContent(CommentValue);
@@ -175,7 +175,7 @@ async function CommentCard  (props) {
       content: CommentValue,
     };
 
-    Axios.post("/comment/saveComment", variables).then((response) => {
+    axiosInstance.post("/comment/saveComment", variables).then((response) => {
       setCommentValue("");
       setOpenReply(!OpenReply);
       props.refreshFunction(response.data);

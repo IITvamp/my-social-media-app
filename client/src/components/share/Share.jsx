@@ -4,9 +4,11 @@ import {
   Cancel,
 } from "@material-ui/icons";
 
+import { axiosInstance } from "../../config.js";
+
+
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 
 
@@ -114,11 +116,11 @@ export default function Share() {
       newPost.img = fileName;
       console.log(newPost);
       try {
-        await axios.post(url + "/upload", data);
+        await axiosInstance.post("/upload", data);
       } catch (err) {}
     }
     try {
-      await axios.post(url + "/posts", newPost);
+      await axiosInstance.post("/posts", newPost);
       window.location.reload();
     } catch (err) {}
   };

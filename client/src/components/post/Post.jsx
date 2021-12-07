@@ -1,5 +1,6 @@
 import "./post.css";
 import {useLocation } from "react-router-dom";
+import { axiosInstance } from "../../config.js";
 
 
 import {
@@ -101,7 +102,7 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await axiosInstance.get(`/users?userId=${post.userId}`);
       setPostUser(res.data);
     };
     fetchUser();
@@ -113,7 +114,7 @@ export default function Post({ post }) {
 
   const likeHandler = () => {
     try {
-      axios.put("/posts/" + post._id + "/like", { userId: user._id });
+      axiosInstance.put("/posts/" + post._id + "/like", { userId: user._id });
     } catch (err) {}
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
@@ -122,7 +123,7 @@ export default function Post({ post }) {
   
   const deleteHandler = () => {
     try {
-      axios.delete("/posts/" + post._id);
+      axiosInstance.delete("/posts/" + post._id);
       console.log(`post deleted with id ${post._id}`);
       window.location.reload();
     } catch (error) {

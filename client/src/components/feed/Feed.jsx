@@ -5,6 +5,8 @@ import "./feed.css";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { axiosInstance } from "../../config.js";
+
 
 const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
@@ -19,8 +21,8 @@ export default function Feed({ userId }) {
     const fetchPosts = async () => {
       console.log(userId)
       const res = userId
-        ? await axios.get(url + "/posts/profile/" + userId)
-        : await axios.get(url + "posts/timeline/" + user._id);
+        ? await axiosInstance.get("/posts/profile/" + userId)
+        : await axiosInstance.get("posts/timeline/" + user._id);
       
       // await res.data.sort((p1, p2) => {
       //   return new Date(p2.createdAt) - new Date(p1.createdAt);
