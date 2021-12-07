@@ -51,7 +51,7 @@ export default function TopBar() {
           <Link to={`/chat`}>
             <Chat className={classes.chatIcon} />
           </Link>
-          <Link to={`/profile/${user.username}`}>
+          <Link to={`/profile/${user._id}`}>
             <Avatar
               src={
                 user.profilePicture

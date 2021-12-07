@@ -1,5 +1,5 @@
 import "./post.css";
-import { useParams, useLocation } from "react-router-dom";
+import {useLocation } from "react-router-dom";
 
 
 import {
@@ -9,9 +9,12 @@ import {
   CardContent,
   Grid,
   Typography,
+  Box,
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+
 
 import { makeStyles } from "@material-ui/core/styles";  
 import { useContext, useEffect, useState } from "react";
@@ -73,52 +76,59 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 5,
     },
   },
+  chip: {
+    display:'flex',
+    margin: 5,
+    
+  }
 }));
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.likes.length);
+
   const [isLiked, setIsLiked] = useState(false);
-  const [user, setUser] = useState({});
+  const [postUser, setPostUser] = useState({});
   const [tags, setTags] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const { user: currentUser } = useContext(AuthContext);
+  const { user} = useContext(AuthContext);
 
     const location = useLocation();
 
 
   useEffect(() => {
-    setIsLiked(post.likes.includes(currentUser._id));
-  }, [currentUser._id, post.likes]);
+    setIsLiked(post.likes.includes(user._id));
+  }, [user._id, post.likes]);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(url + `/users?userId=${post.userId}`);
-      setUser(res.data);
+      const res = await axios.get(`/users?userId=${post.userId}`);
+      setPostUser(res.data);
     };
     fetchUser();
   }, [post.userId]);
 
-  useEffect(() => {
-    console.log(post.tags);
-  }, [post])
+  // useEffect(() => {
+  //   console.log(post.tags);
+  // }, [post])
 
   const likeHandler = () => {
     try {
-      axios.put(url + "/posts/" + post._id + "/like", { userId: currentUser._id });
+      axios.put("/posts/" + post._id + "/like", { userId: user._id });
     } catch (err) {}
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
   };
 
+  
   const deleteHandler = () => {
     try {
-      axios.delete(url + "/posts/" + post._id);
+      axios.delete("/posts/" + post._id);
       console.log(`post deleted with id ${post._id}`);
       window.location.reload();
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const classes = useStyles();
 
@@ -126,29 +136,37 @@ export default function Post({ post }) {
   return (
     <>
       <Card className={classes.newsCard}>
-        <CardHeader
-          avatar={
-            <Link to={`/profile/${user.username}`}>
-              <Avatar
-                aria-label="news card"
-                src={
-                  user.profilePicture
-                    ? PF + user.profilePicture
-                    : PF + "person/noAvatar.png"
-                }
-                alt=""
-              ></Avatar>
-            </Link>
-          }
-          title={user.username}
-          subheader={format(post.createdAt)}
-        ></CardHeader>
-        {post.userId === currentUser._id &&
-          !location.pathname.startsWith("/post") && (
+        <Box>
+          <CardHeader
+            avatar={
+              <Link to={`/profile/${postUser._id}`}>
+                <Avatar
+                  aria-label="news card"
+                  src={
+                    postUser.profilePicture
+                      ? PF + postUser.profilePicture
+                      : PF + "person/noAvatar.png"
+                  }
+                  alt=""
+                ></Avatar>
+              </Link>
+            }
+            title={postUser.username}
+            subheader={format(post.createdAt)}
+          ></CardHeader>
+        </Box>
+        {post.userId === user._id && !location.pathname.startsWith("/post") && (
+          <>
             <IconButton color="primary" onClick={deleteHandler}>
               <DeleteIcon />
             </IconButton>
-          )}
+            <Link to={`/post/edit/${post._id}`}>
+              <IconButton color="primary">
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </>
+        )}
         <CardContent className={classes.cardContent}>
           <Grid container>
             <Grid item lg={5} md={5} sm={5} xs={12}>
@@ -196,18 +214,36 @@ export default function Post({ post }) {
             </Grid>
 
             <Grid container={"true"} item>
-              <Grid item={"true"} lg={12} style={{ height: "30px" }}>
-                
-                {(post?.tags.length > 0) && post.tags.map((chip) => {
-                  return (
-                    <>
-                      <Link to={`/tags/${chip}`}>
-                        <Chip label={chip} className={classes.chip} />
-                      </Link>
-                    </>
-                  );
-                })}
-                
+              <Grid
+                item={"true"}
+                lg={12}
+                style={{
+                  height: "30px",
+                  margin: "5px",
+                  marginLeft: "-3px",
+                  marginTop: "4px",
+                }}
+              >
+                {/* {post?.tags.length > 0 && <SmallChip tags={post.tags}/>} */}
+                {post?.tags.length > 0 &&
+                  post.tags.map((chip) => {
+                    return (
+                      <>
+                        <Link to={`/tags/${chip}`}>
+                          <Chip
+                            classname={classes.chip}
+                            label={chip}
+                            style={{
+                              color: "red",
+                              margin: "2px",
+
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Link>
+                      </>
+                    );
+                  })}
               </Grid>
             </Grid>
           </Grid>

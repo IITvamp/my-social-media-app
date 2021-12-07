@@ -3,18 +3,16 @@ import Post from "../../components/post/Post";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
-import Comments from "../../components/Comment/Comment"
+import Comments from "../../components/Comment/Comment";
 
 
 export default function DetailPage() {
     const [post, setPost] = useState({ likes: [], tags: [] });
     const [CommentLists, setCommentLists] = useState([]);
     const postId = useParams().postId;
-    console.log(postId);
+  console.log(postId);
 
-    useEffect(() => {
-        console.log("useEffect called");
-        
+    useEffect(() => {        
       const fetchPost = async () => {
         const res = await axios.get(`/posts/${postId}`);
         setPost(res.data);
@@ -23,18 +21,22 @@ export default function DetailPage() {
         };
         
       fetchPost();
-      console.log("fetchPost called ");
     }, [postId]);
 
-    useEffect(() => {
-      const fetchComments = async () => {
-        console.log("fetch comment called");
-        const res = await axios.get("/comment/getComment/" + postId);
-        setCommentLists(res.data);
-        console.log(res);
-      };
-      fetchComments();
-      console.log("fetch comment called");
+  useEffect(() => {
+    try {
+         const fetchComments = async () => {
+           console.log("fetch comment called");
+           const res = await axios.get("/comment/getComment/" + postId);
+           console.log(res.data);
+           setCommentLists(CommentLists.concat(res.data));
+           console.log(res);
+           fetchComments();
+         };
+      } catch (error) {
+        console.log(error);
+        alert(error);
+      }
     }, [postId]);
 
     const updateComment = (newComment) => {
@@ -43,9 +45,11 @@ export default function DetailPage() {
 
     return (
       <>
-        <Topbar />{console.log(post)}
+        <Topbar />
+        {console.log(post)}
         <Post key={postId} post={post} />;
         <Comments
+          key={postId}
           CommentLists={CommentLists}
           postId={postId}
           refreshFunction={updateComment}

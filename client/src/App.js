@@ -4,7 +4,7 @@ import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import DetailPage from "./pages/PostExplainaition/PostExplainaition";
 import SearchPage from "./pages/search/search";
-import ChatBox from "./components/ChatBox/ChatBox";
+import UpdatePost from "./pages/updatePost/updateForm"
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,26 +20,25 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          {/* <Home/> */}
-          {user ? <Home /> : <Register />}
+          {user ? <Home /> : <Login />}
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
-        <Route path="/register">
-          {user ? <Redirect to="/" /> : <Register />}
-        </Route>
+        <Route path="/register">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/newPost">
           {user ? <Redirect to="/" /> : <Register />}
         </Route>
-        <Route path="/profile/:username">
+        <Route path="/profile/:userid">
           <Profile />
         </Route>
-        <Route path="/post/:postId">
+        <Route exact path="/post/:postId">
           <DetailPage />
         </Route>
         <Route path="/tags/:tags">
           <SearchPage />
         </Route>
-        <Route path="/chat">{user ? <ChatBox /> : <Register />}</Route>
+        <Route exact path="/post/edit/:postId">
+          <UpdatePost />
+        </Route>
       </Switch>
     </Router>
   );

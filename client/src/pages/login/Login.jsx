@@ -1,9 +1,10 @@
 import { useContext, useRef } from "react";
 import "./login.css";
-import { loginCall } from "../../apiCalls";
+import { loginCall, adduser } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@material-ui/core";
 import { useHistory } from "react-router";
+import { GoogleLogin } from "react-google-login";
 
 export default function Login() {
   const email = useRef();
@@ -23,9 +24,28 @@ export default function Login() {
     );
   };
 
+  const loginSuccess = async (res) => {
+    console.log(res.profileObj);
+    adduser(
+      {
+        email: res.profileObj.email,
+        userName: res.profileObj.name,
+        googleid: res.profileObj.googleId,
+        profilePicture: res.profileObj.imageUrl,
+      },
+      dispatch
+    );
+    console.log("Login success");
+  };
+
+  const loginFailure = () => {
+    console.log("Login success");
+  };
+
+
   return (
     <div className="login">
-      <div className="loginWrapper">
+      {/* <div className="loginWrapper">
         <div className="loginLeft">
           <h3 className="loginLogo">Inshorts</h3>
           <span className="loginDesc">
@@ -57,16 +77,28 @@ export default function Login() {
               )}
             </button>
             <span className="loginForgot">Forgot Password?</span>
-            <button className="loginRegisterButton" onClick={RegisterButtonHandler}>
+            <button
+              className="loginRegisterButton"
+              onClick={RegisterButtonHandler}
+            >
               {isFetching ? (
                 <CircularProgress color="white" size="20px" />
               ) : (
                 "Create a New Account"
               )}
             </button>
-          </form>
+          </form> */}
+
+          <GoogleLogin
+            clientId="486729059700-ifbo2b2r6pmpfb7rctlu654snp89u10n.apps.googleusercontent.com"
+            buttonText="login through google"
+            isSignedIn={true}
+            onSuccess={loginSuccess}
+            onFailure={loginFailure}
+            cookiePolicy={"single_host_origin"}
+          />
         </div>
-      </div>
-    </div>
+    //   </div>
+    // </div>
   );
 }

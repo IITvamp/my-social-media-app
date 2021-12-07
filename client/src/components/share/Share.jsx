@@ -4,12 +4,11 @@ import {
   Cancel,
 } from "@material-ui/icons";
 
-import { useContext, useRef, useState, useEffect } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 
-import { useParams, useLocation } from "react-router-dom";
 
 import {
   Card,
@@ -20,13 +19,9 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import DeleteIcon from "@material-ui/icons/Delete";
-
 import { makeStyles } from "@material-ui/core/styles";
-import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { Chip } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
 
 const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 

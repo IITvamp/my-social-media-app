@@ -13,3 +13,15 @@ export const loginCall = async (userCredential, dispatch) => {
   } 
 };
 
+
+export const adduser = async (userCredential, dispatch) => {
+  dispatch({ type: "LOGIN_START" });
+  try {
+    console.log(userCredential);
+    const res = await axios.post("/auth/adduser", userCredential);
+    dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+  } catch (err) {
+    dispatch({ type: "LOGIN_FAILURE", payload: err });
+  }
+};
+

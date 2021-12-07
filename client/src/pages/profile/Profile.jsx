@@ -9,16 +9,16 @@ import { useParams } from "react-router";
 export default function Profile() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [user, setUser] = useState({});
-  const username = useParams().username;
+  const userid = useParams().userid;
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?username=${username}`);
+      const res = await axios.get(`/users?userId=${userid}`);
       setUser(res.data);
       console.log(res.data);
     };
     fetchUser();
-  }, [username]);
+  }, [userid]);
 
   return (
     <>
@@ -53,7 +53,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed username={username} />
+            <Feed userId={userid} />
           </div>
         </div>
       </div>
