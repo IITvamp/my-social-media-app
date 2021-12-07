@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://obscure-meadow-29718.herokuapp.com/api";
+const url =process.env.URl || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export const loginCall = async (userCredential, dispatch) => {
   dispatch({ type: "LOGIN_START" });
@@ -18,7 +18,7 @@ export const adduser = async (userCredential, dispatch) => {
   dispatch({ type: "LOGIN_START" });
   try {
     console.log(userCredential);
-    const res = await axios.post("/auth/adduser", userCredential);
+    const res = await axios.post(url + "/auth/adduser", userCredential);
     dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
   } catch (err) {
     dispatch({ type: "LOGIN_FAILURE", payload: err });
