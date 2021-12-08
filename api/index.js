@@ -14,9 +14,7 @@ const router = express.Router();
 const path = require("path");
 
 dotenv.config();
-
-const MONGO_URL =
-  "mongodb+srv://User1:user123@cluster0.zbqd2.mongodb.net/socialmediadatabase?retryWrites=true&w=majority";
+app.use(cors());
 mongoose.connect(
   "mongodb+srv://User1:user123@cluster0.zbqd2.mongodb.net/socialmediadatabase?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -30,7 +28,7 @@ app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
-app.use(cors);
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -40,6 +38,8 @@ const storage = multer.diskStorage({
     cb(null, req.body.name);
   },
 });
+
+const port = 8080;
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
@@ -56,6 +56,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/comment", commentRoute); 
 
 
-app.listen(process.env.PORT || 8800, () => {
-  console.log("Backend server is running!");
+app.listen(process.env.PORT || port, () => {
+  console.log("Backend server is running!" + port);
 });
