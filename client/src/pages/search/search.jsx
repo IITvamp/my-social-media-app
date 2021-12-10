@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { Typography, CircularProgress, Grid, Divider } from "@material-ui/core";
 
 import Post from "../../components/post/Post";
-
+import { axiosInstance } from "../../config";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
@@ -17,9 +17,7 @@ export default function SearchPage() {
     useEffect(() => {
         async function fetchPosts() {
             console.log(tags);
-            const res = await axios.get(
-                `/posts/search/${tags}`
-            );
+            const res = await axiosInstance.get(`/posts/search/${tags}`);
             console.log(res);
             setPosts(res.data);
         }

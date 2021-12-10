@@ -181,7 +181,7 @@ function Comments(props) {
                   {user.username}
                 </Link>
               </Typography>
-              {/* <Box classname={classes.submitbutton}> */}
+              
               <Button
                 disabled={disabled}
                 classname={classes.submitbutton}
@@ -189,7 +189,7 @@ function Comments(props) {
               >
                 Comment
               </Button>
-              {/* </Box> */}
+              
             </Box>
           </Box>
         </>

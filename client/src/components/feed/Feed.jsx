@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { axiosInstance } from "../../config.js";
+import {Grid} from "@material-ui/core"
 
 
 const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
@@ -40,10 +41,13 @@ export default function Feed({ userId }) {
     //   hasMore={true}
     // >
     <div>
-      <Share/>
-      {posts.map((p) => (
-        <Post key={p._id} post={p} />
-      ))}
+      <Share />
+      
+      <Grid item lg={12} md={12} sm={12} xs={12}>
+        {posts.map((p) => (
+          <Post key={p._id} post={p} />
+        ))}
+      </Grid>
     </div>
     // </InfiniteScroll>
   );

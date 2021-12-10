@@ -19,7 +19,6 @@ import EditIcon from "@material-ui/icons/Edit";
 
 import { makeStyles } from "@material-ui/core/styles";  
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -85,16 +84,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Post({ post }) {
-  const [like, setLike] = useState(post.likes.length);
-
+  const [votes, setVotes] = useState((post.upvotes.length - post.downvotes.length));
   const [isLiked, setIsLiked] = useState(false);
+  const [isDownvoted, setIsDownvoted] = useState(false);
   const [postUser, setPostUser] = useState({});
   const [tags, setTags] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user} = useContext(AuthContext);
 
-    const location = useLocation();
-
+  const location = useLocation();
 
   useEffect(() => {
     setIsLiked(post.likes.includes(user._id));
@@ -108,19 +106,24 @@ export default function Post({ post }) {
     fetchUser();
   }, [post.userId]);
 
-  // useEffect(() => {
-  //   console.log(post.tags);
-  // }, [post])
-
-  const likeHandler = () => {
+  const upvoteHandler = () => {
     try {
-      axiosInstance.put("/posts/" + post._id + "/like", { userId: user._id });
-    } catch (err) {}
-    setLike(isLiked ? like - 1 : like + 1);
+      axiosInstance.put("/posts/" + post._id + "/upvote", { userId: user._id });
+    } catch (err) { }
+    setVotes(isDownvoted ? votes + 2 : isLiked ? votes -1 : votes + 1);
     setIsLiked(!isLiked);
+    setIsDownvoted(isDownvoted ? false : true);
   };
 
-  
+  const downvoteHandler = () => {
+    try {
+      axiosInstance.put("/posts/" + post._id + "/downvote", { userId: user._id });
+    } catch (err) {}
+    setVotes(isLiked ? votes - 2 : isDownvoted ? votes + 1 : votes - 1);
+    setIsDownvoted(!isDownvoted);
+    setIsLiked(isLiked ? false : true);
+  };
+
   const deleteHandler = () => {
     try {
       axiosInstance.delete("/posts/" + post._id);
@@ -132,7 +135,6 @@ export default function Post({ post }) {
   };
 
   const classes = useStyles();
-
 
   return (
     <>
@@ -170,7 +172,7 @@ export default function Post({ post }) {
         )}
         <CardContent className={classes.cardContent}>
           <Grid container>
-            <Grid item lg={5} md={5} sm={5} xs={12}>
+            <Grid item lg={5} md={12} sm={12} xs={12}>
               <img
                 src={
                   PF + post.img
@@ -185,8 +187,8 @@ export default function Post({ post }) {
             <Grid
               item
               lg={7}
-              md={7}
-              sm={7}
+              md={12}
+              sm={12}
               xs={12}
               className={classes.rightContainer}
             >

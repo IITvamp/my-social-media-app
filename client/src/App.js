@@ -23,21 +23,16 @@ function App() {
           {user ? <Home /> : <Login />}
         </Route>
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
-        <Route path="/register">{user ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/newPost">
           {user ? <Redirect to="/" /> : <Register />}
         </Route>
-        <Route path="/profile/:userid">
-          <Profile />
-        </Route>
+        <Route path="/profile/:userid">{user ? <Profile /> : <Login />}</Route>
         <Route exact path="/post/:postId">
-          <DetailPage />
+          {user ? <DetailPage /> : <Login />}
         </Route>
-        <Route path="/tags/:tags">
-          <SearchPage />
-        </Route>
+        <Route path="/tags/:tags">{user ? <SearchPage /> : <Login />}</Route>
         <Route exact path="/post/edit/:postId">
-          <UpdatePost />
+          {user ? <UpdatePost /> : <Login />}
         </Route>
       </Switch>
     </Router>

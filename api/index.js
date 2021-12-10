@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const port = 8080;
+const port = 8800;
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
