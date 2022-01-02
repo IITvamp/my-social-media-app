@@ -1,16 +1,26 @@
 import axios from "axios";
-import { useRef } from "react";
+import { useState, useContext } from "react";
 import "./register.css";
 import { useHistory } from "react-router";
 import { GoogleLogin } from "react-google-login";
 
+import { UserContext } from "../../context/UserContext";
+import { axiosInstance } from "../../config";
+
+
 const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export default function Register() {
-  const username = useRef();
-  const email = useRef();
-  const password = useRef();
-  const passwordAgain = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordAgain, setPasswordAgain] = useState("");
+  const [userContext, setUserContext] = useContext(UserContext);
+
   const history = useHistory();
 
   const LoginButtonHandler = () => {
@@ -27,20 +37,60 @@ export default function Register() {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    if (passwordAgain.current.value !== password.current.value) {
-      passwordAgain.current.setCustomValidity("Passwords don't match!");
-    } else {
+    if (passwordAgain !== password) {
+      passwordAgain.setCustomValidity("Passwords don't match!");
+    }
+    else {
+      setIsSubmitting(true);
+      const ErrorMessage = "Something went wrong! Please try again later.";
       const user = {
-        username: username.current.value,
-        email: email.current.value,
-        password: password.current.value,
+        firstname:firstName,
+        username: email,
+        password: password,
+        lastname: lastName,
+        email:email,
       };
       try {
-        await axios.post(url + "/auth/register", user);
+        const res = await axiosInstance.post("/auth/signup", user);
+        setIsSubmitting(false);
+        console.log(res.status);
+        if (res.status!==200) {
+          if (res.status === 400) {
+            setError("Please fill all the fields correctly!");
+          } else if (res.status === 401) {
+            setError("Invalid email and password combination.");
+          } else if (res.status === 500) {
+            console.log(res);
+            if (res.message) setError(res.message ||ErrorMessage);
+          }
+          else {
+            setError(ErrorMessage);
+          }
+        }
+        else {
+          console.log(res);
+          setUserContext((oldValues) => {
+            return { ...oldValues, token: res.data.token };
+          });
+        }
         history.push("/login");
-      } catch (err) {
+      }
+      catch (err) {
         console.log(err);
       }
+
+
+      // const user = {
+      //   username: username.current.value,
+      //   email: email.current.value,
+      //   password: password.current.value,
+      // };
+      // try {
+      //   await axios.post(url + "/auth/register", user);
+      //   history.push("/login");
+      // } catch (err) {
+      //   console.log(err);
+      // }
     }
   };
 
@@ -57,22 +107,32 @@ export default function Register() {
           <div className="loginRight">
             <form className="loginBox" onSubmit={handleClick}>
               <input
-                placeholder="Username"
+                placeholder="First name"
                 required
-                ref={username}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="loginInput"
+              />
+              <input
+                placeholder="Last name"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="loginInput"
               />
               <input
                 placeholder="Email"
                 required
-                ref={email}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="loginInput"
                 type="email"
               />
               <input
                 placeholder="Password"
                 required
-                ref={password}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="loginInput"
                 type="password"
                 minLength="6"
@@ -80,7 +140,8 @@ export default function Register() {
               <input
                 placeholder="Password Again"
                 required
-                ref={passwordAgain}
+                value={passwordAgain}
+                onChange={(e) => setPasswordAgain(e.target.value)}
                 className="loginInput"
                 type="password"
               />

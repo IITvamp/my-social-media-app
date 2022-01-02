@@ -7,12 +7,11 @@ router.post("/saveComment", async (req, res) => {
   try {
     const savedComment = await newComment.save();
       res.status(200).json(savedComment);
-    
-  } catch (err) {
-    res.status(500).json(err.message);
   }
-    
-  });
+  catch (err) {
+    res.status(500).json(err.message);
+  } 
+});
 
 
 router.get("/getComment/:postId", async (req, res) => {

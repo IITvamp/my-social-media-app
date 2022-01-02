@@ -2,13 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
+import {UserProvider} from "./context/UserContext"
 
-import "antd/dist/antd.css";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById("root")

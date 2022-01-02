@@ -1,8 +1,9 @@
 import { createContext, useEffect, useReducer } from "react";
 import AuthReducer from "./AuthReducer";
+import { UserContext } from "./UserContext";
 
 const INITIAL_STATE = {
-  user: null,
+  user: UserContext.user ? UserContext.user : null,
   isFetching: false,
   error: false,
 };

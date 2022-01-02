@@ -9,6 +9,7 @@ import { axiosInstance } from "../../config.js";
 
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { UserContext } from "../../context/UserContext";
 import ChipInput from "material-ui-chip-input";
 
 
@@ -121,7 +122,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Share() {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const [userContext, setUserContext] = useContext(UserContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -129,7 +131,10 @@ export default function Share() {
   const [tags, setTags] = useState([]);
   const [file, setFile] = useState(null);
 
-    const classes = useStyles();
+  const user = userContext.user;
+  console.log(user);
+
+  const classes = useStyles();
 
 
   const handleAddChip = (chip) => {
@@ -162,6 +167,7 @@ export default function Share() {
     }
     try {
       await axiosInstance.post("/posts", newPost);
+      console.log(user);
       window.location.reload();
     } catch (err) {}
   };

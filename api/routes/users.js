@@ -2,6 +2,13 @@ const User = require("../models/User");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 
+const {
+  getToken,
+  COOKIE_OPTIONS,
+  getRefreshToken,
+  verifyUser,
+} = require("../authenticate");
+
 //update user
 router.put("/:id", async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
@@ -51,6 +58,10 @@ router.delete("/:id", async (req, res) => {
 //     res.status(500).json(err.message);
 //   }
 // });
+
+router.get("/me", verifyUser, (req, res, next) => {
+  res.send(req.user);
+});
 
 //get a user
 router.get("/", async (req, res) => {

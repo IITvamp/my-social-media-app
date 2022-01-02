@@ -1,10 +1,22 @@
-const mongoose = require("mongoose");
+"use strict";
 
-const UserSchema = new mongoose.Schema(
-  {
-    googleId: {
-      type: String,
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+mongoose.models = {};
+mongoose.modelSchemas = {};
+
+const passportLocalMongoose = require("passport-local-mongoose");
+
+const Session = new Schema({
+  refreshToken: {
+    type: String,
+    default: "",
   },
+});
+
+const User = new Schema(
+  {
     username: {
       type: String,
       require: true,
@@ -12,15 +24,21 @@ const UserSchema = new mongoose.Schema(
       max: 20,
       unique: true,
     },
-    googleId: {
+    firstname: {
       type: String,
-      required: true,
+      default: "",
+    },
+    lastname: {
+      type: String,
+      default: "",
     },
     email: {
       type: String,
-      required: true,
-      max: 50,
-      unique: true,
+      require: true,
+    },
+    authStrategy: {
+      type: String,
+      default: "local",
     },
     profilePicture: {
       type: String,
@@ -54,8 +72,21 @@ const UserSchema = new mongoose.Schema(
       type: String,
       max: 50,
     },
+    refreshToken: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", UserSchema);
+// User.set("toJSON", {
+//   transform: function (doc, ret, options) {
+//     delete ret.refreshToken;
+//     return ret;
+//   },
+// });
+
+User.plugin(passportLocalMongoose);
+
+module.exports = mongoose.model("User", User);
