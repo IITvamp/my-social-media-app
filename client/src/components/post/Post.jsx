@@ -1,7 +1,6 @@
-import "./post.css";
+// import "./post.css";
 import {useLocation } from "react-router-dom";
 import { axiosInstance } from "../../config.js";
-
 
 import {
   Card,
@@ -81,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Post({ post }) {
-  const [votes, setVotes] = useState((post.upvotes.length - post.downvotes.length));
+  const [votes, setVotes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
   const [postUser, setPostUser] = useState({});
@@ -151,7 +150,7 @@ export default function Post({ post }) {
                 ></Avatar>
               </Link>
             }
-            title={postUser.username}
+            title={postUser.firstname}
             subheader={format(post.createdAt)}
           ></CardHeader>
         </Box>

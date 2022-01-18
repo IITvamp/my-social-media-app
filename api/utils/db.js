@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const url = process.env.MONGO;
-console.log(url);
 const connect = mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

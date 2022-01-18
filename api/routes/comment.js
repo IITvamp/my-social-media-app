@@ -1,4 +1,5 @@
 const express = require("express");
+const { verifyUser } = require("../authenticate");
 const router = express.Router();
 const  Comment = require("../models/Comment");
 
@@ -24,7 +25,6 @@ router.get("/getComment/:postId", async (req, res) => {
     } catch (error) {
         return res.status(400).send(error);
     }  
-
 });
   
 router.put("/updateComment/:commentId", async (req, res) => {

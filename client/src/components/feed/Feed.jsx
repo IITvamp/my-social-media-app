@@ -1,54 +1,73 @@
-import { useContext, useEffect, useState, useRef, useCallback } from "react";
+import { useContext, useEffect, useState, } from "react";
+
+import ReactLoading from "react-loading";
+import { Grid } from "@material-ui/core";
+
 import Post from "../post/Post";
 import Share from "../share/Share";
-import "./feed.css";
-import axios from "axios";
+// import "./feed.css";
 import { AuthContext } from "../../context/AuthContext";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { PostContext } from "../../context/PostContext/PostContext";
 import { axiosInstance } from "../../config.js";
-import {Grid} from "@material-ui/core"
-
-
-const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export default function Feed({ userId }) {
-  
-  const [page, setPage] = useState(1);
-  
-  const [posts, setPosts] = useState([]);
   const { user } = useContext(AuthContext);
+  const { posts, dispatch } = useContext(PostContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log(userId)
-      const res = userId
-        ? await axiosInstance.get("/posts/profile/" + userId)
-        : await axiosInstance.get("posts/timeline/" + user._id);
+      console.log(userId);
+      if (userId) {
+        try {
+          const res = await axiosInstance.get("/posts/profile/" + userId);
+          dispatch({
+            type: "POST_FETCHING_SUCCESS",
+            payload: res.data,
+          });
+        } catch (error) {
+          dispatch({
+            type: "POST_FETCHING_FAILURE",
+            payload: "some error occured",
+          });
+        }
+      } else {
+        console.log(user._id);
+        try {
+          const res = await axiosInstance.get("posts/timeline/" + user._id);
+          dispatch({
+            type: "POST_FETCHING_SUCCESS",
+            payload: res.data,
+          });
+        } catch (error) {
+          dispatch({
+            type: "POST_FETCHING_FAILURE",
+            payload: "some error occured",
+          });
+        }
+       
+      }
       
-      // await res.data.sort((p1, p2) => {
-      //   return new Date(p2.createdAt) - new Date(p1.createdAt);
-      // });
-      setPosts(res.data);
-      console.log(res.data);
     };
     fetchPosts();
   }, [userId, user._id]);
 
   return (
-    // <InfiniteScroll
-    //   dataLength={posts.length}
-    //   next={() => setPage((page) => page + 1)}
-    //   hasMore={true}
-    // >
     <div>
       <Share />
-      
-      <Grid item lg={12} md={12} sm={12} xs={12}>
-        {posts.map((p) => (
-          <Post key={p._id} post={p} />
-        ))}
-      </Grid>
+      {!posts ? (
+        <ReactLoading
+          type={"bars"}
+          color={"#03fc4e"}
+          height={100}
+          width={100}
+        />
+      ) : (
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          {posts.map((p) => (
+            <Post key={p._id} post={p} />
+          ))}
+        </Grid>
+      )}
     </div>
-    // </InfiniteScroll>
   );
 }

@@ -44,18 +44,6 @@ const User = new Schema(
       type: String,
       default: "",
     },
-    coverPicture: {
-      type: String,
-      default: "",
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    followings: {
-      type: Array,
-      default: [],
-    },
     isAdmin: {
       type: Boolean,
       default: false,
@@ -63,18 +51,6 @@ const User = new Schema(
     desc: {
       type: String,
       max: 50,
-    },
-    city: {
-      type: String,
-      max: 50,
-    },
-    from: {
-      type: String,
-      max: 50,
-    },
-    refreshToken: {
-      type: Array,
-      default: [],
     },
   },
   { timestamps: true }

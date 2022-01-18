@@ -1,10 +1,9 @@
 import { useEffect, useContext, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { Typography, CircularProgress, Grid, Divider } from "@material-ui/core";
+import { useParams } from "react-router-dom";
+import { Typography, Divider } from "@material-ui/core";
 
 import Post from "../../components/post/Post";
 import { axiosInstance } from "../../config";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
 

@@ -10,6 +10,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 
 
@@ -17,13 +18,7 @@ const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const commentRoute = require("./routes/comment");
-const router = express.Router();
 const path = require("path");
-
-// if (process.env.NODE_ENV !== "production") {
-  
-//   require("dotenv").config();
-// }
 
 dotenv.config();
 
@@ -38,7 +33,6 @@ require("./authenticate");
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 //middleware
-// app.use(cors());
 
 app.use(express.json());
 app.use(helmet());
@@ -47,6 +41,7 @@ app.use(morgan("common"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(passport.initialize());
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");

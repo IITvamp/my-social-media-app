@@ -14,28 +14,24 @@ import {
 import { useContext, useCallback, useEffect } from "react";
 import { axiosInstance } from "./config";
 import { AuthContext } from "./context/AuthContext";
-import { UserContext } from "./context/UserContext";
+import {TokenContext} from "./context/TokenContext";
 
 function App() {
   const { user } = useContext(AuthContext);
-  const [userContext, setUserContext] = useContext(UserContext);
+  const  [token, setToken ] = useContext(TokenContext);
+
+  console.log(token);
 
   const verifyUser = useCallback(async () => {
     const res =await axiosInstance.post("/auth/refreshToken");
     
-      if (res.status===200) {
-        setUserContext((oldValues) => {
-          return { ...oldValues, token: res.data.token };
-        });
-      } else {
-        setUserContext((oldValues) => {
-          return { ...oldValues, token: null };
-        });
-      }
-      // call refreshToken every 5 minutes to renew the authentication token.
-      setTimeout(verifyUser, 5 * 60 * 1000);
-   
-  }, [setUserContext]);
+    if (res.status === 200) {
+      setToken(res.data.token);
+    }
+    else {
+      setToken(null);
+      }   
+  }, [setToken, token]);
 
   useEffect(() => {
     verifyUser();
@@ -47,24 +43,24 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          {userContext.token ? <Home /> : <Login />}
+          {token ? <Home /> : <Login />}
         </Route>
         <Route path="/login">
-          {userContext.token ? <Redirect to="/" /> : <Login />}
+          {token ? <Redirect to="/" /> : <Login />}
         </Route>
         <Route path="/register">
-          {userContext.token ? <Redirect to="/" /> : <Register />}
+          {token ? <Redirect to="/" /> : <Register />}
         </Route>
         <Route path="/newPost">
-          {userContext.token ? <Redirect to="/" /> : <Register />}
+          {token ? <Redirect to="/" /> : <Register />}
         </Route>
         <Route path="/profile/:userid">{user ? <Profile /> : <Login />}</Route>
         <Route exact path="/post/:postId">
-          {userContext.token ? <DetailPage /> : <Login />}
+          {token ? <DetailPage /> : <Login />}
         </Route>
         <Route path="/tags/:tags">{user ? <SearchPage /> : <Login />}</Route>
         <Route exact path="/post/edit/:postId">
-          {userContext.token ? <UpdatePost /> : <Login />}
+          {token ? <UpdatePost /> : <Login />}
         </Route>
       </Switch>
     </Router>
