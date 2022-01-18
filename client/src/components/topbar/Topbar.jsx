@@ -1,135 +1,99 @@
-import { AppBar, Toolbar, Avatar } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
-import { Search, Person, Chat, Notifications } from "@material-ui/icons";
-
-import { useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import Drawer from "@material-ui/core/Drawer";
+import Box from "@material-ui/core/Box";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
+import MenuIcon from "@material-ui/icons/Menu";
+import { makeStyles } from "@material-ui/core/styles";
+import Footer from "./Footer";
 
-
-import HamburgerDrawer from "../AnimatedSidebar/HamurgerDrawer";
-
-import inshortsLogo from "../Assets/real inshorts logo.png"
-
-const useStyles = makeStyles({
-  header: {
-    background: "#fff",
-    height: 70,
-    position: "relative",
+const useStyles = makeStyles((theme) => ({
+  appbar: {
+    margin: 0,
   },
-  logolink: {
-    position: "relative",
-    margin: "auto",
-    right: "30px",
-    cursor: "pointer",
+  menuIcon: {
+    color: "tomato",
   },
-  logoImage: {
-    height: "50px",
-    right: "30px",
-    cursor: "pointer",
+  title: {
+    color: "tan",
+  },
+  menuSliderContainer: {
+    width: `inherit`,
+    background: "#511",
+    height: "100%",
   },
   avatar: {
-    cursor: "pointer",
-    height: 36,
-    width: 36,
+    display: "block",
+    margin: "0.5rem auto",
+    width: theme.spacing(13),
+    height: theme.spacing(13),
   },
-  chatIcon: {
-    
+  listItem: {
+    color: "tan",
   },
-});
-export default function TopBar() {
+}));
+
+const menuItems = [
+  { listText: "Business" },
+  { listText: "Technology" },
+  { listText: "Startups" },
+  { listText: "React" },
+  { listText: "Javascript" },
+  { listText: "Elon Musk" },
+  { listText: "Politics" },
+  { listText: "Celebrities" },
+];
+
+const Topbar = () => {
+  const [open, setOpen] = useState(false);
+
   const classes = useStyles();
-  const { user } = useContext(AuthContext);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  return (
-    <>
-      <AppBar className={classes.header}>
-        <Toolbar>
-          <HamburgerDrawer />
-          <Link to={`/`} className={classes.logolink}>
-            <img src={inshortsLogo} alt="logo" className={classes.logoImage} />
-          </Link>
-          <Link to={`/chat`}>
-            <Chat className={classes.chatIcon} />
-          </Link>
-          <Link to={`/profile/${user._id}`}>
-            <Avatar
-              src={
-                user.profilePicture
-                  ? PF + user.profilePicture
-                  : PF + "person/noAvatar.png"
-              }
-              alt=""
-              className={classes.avatar}
-            />
-          </Link>
-        </Toolbar>
-      </AppBar>
-    </>
+
+  const categoryList = () => (
+    <Box className={classes.menuSliderContainer} component="div">
+      <List>
+        {menuItems.map((item, i) => (
+          <ListItem
+            button
+            key={i}
+            className={classes.listItem}
+            onClick={() => setOpen(false)}
+            component={Link}
+            to={`/tags/${item.listText}`}
+          >
+            <ListItemText primary={item.listText} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
   );
-}
 
-// import "./topbar.css";
-// import { Search, Person, Chat, Notifications } from "@material-ui/icons";
-// import { Link } from "react-router-dom";
-// import { useContext } from "react";
-// import { AuthContext } from "../../context/AuthContext";
+  return (
+    <React.Fragment>
+      <Box component="nav">
+        <AppBar position="static" className={classes.appbar}>
+          <Toolbar>
+            <IconButton onClick={() => setOpen(true)}>
+              <MenuIcon className={classes.menuIcon} />
+            </IconButton>
+            <Typography variant="h5" className={classes.title}>
+              NewsShorts
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Drawer open={open} anchor="left" onClose={() => setOpen(false)}>
+        {categoryList()}
+        <Footer />
+      </Drawer>
+    </React.Fragment>
+  );
+};
 
-// import HamburgerDrawer from "../AnimatedSidebar/HamurgerDrawer"
-
-// export default function Topbar() {
-//   const { user } = useContext(AuthContext);
-//   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-//   return (
-//     <div className="topbarContainer">
-//       <div className="menu">
-//         <HamburgerDrawer/>
-//       </div>
-//       <div className="topbarLeft">
-//         <Link to="/" style={{ textDecoration: "none" }}>
-//           <span className="logo">my news</span>
-//         </Link>
-//       </div>
-//       <div className="topbarCenter">
-//         <div className="searchbar">
-//           <Search className="searchIcon" />
-//           <input
-//             placeholder="Search for friend, post or video"
-//             className="searchInput"
-//           />
-//         </div>
-//       </div>
-//       <div className="topbarRight">
-//         <div className="topbarLinks">
-//           <span className="topbarLink">Homepage</span>
-//           <span className="topbarLink">Timeline</span>
-//         </div>
-//         <div className="topbarIcons">
-//           <div className="topbarIconItem">
-//             <Person />
-//             <span className="topbarIconBadge">1</span>
-//           </div>
-//           <div className="topbarIconItem">
-//             <Chat />
-//             <span className="topbarIconBadge">2</span>
-//           </div>
-//           <div className="topbarIconItem">
-//             <Notifications />
-//             <span className="topbarIconBadge">1</span>
-//           </div>
-//         </div>
-//         <Link to={`/profile/${user.username}`}>
-//           <img
-//             src={
-//               user.profilePicture
-//                 ? PF + user.profilePicture
-//                 : PF + "person/noAvatar.png"
-//             }
-//             alt=""
-//             className="topbarImg"
-//           />
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// }
+export default Topbar;

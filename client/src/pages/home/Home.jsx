@@ -1,58 +1,59 @@
+import "./home.css";
+
+import { useCallback, useEffect, useContext } from "react";
+import ReactLoading from "react-loading";
+
 import Topbar from "../../components/topbar/Topbar";
 import Feed from "../../components/feed/Feed";
-import "./home.css";
-import { useCallback, useEffect, useContext } from "react";
-import { UserContext } from "../../context/UserContext";
 import { AuthContext } from "../../context/AuthContext";
+import { TokenContext } from "../../context/TokenContext";
 import { axiosInstance } from "../../config";
 
 export default function Home() {
-  const [userContext, setUserContext] = useContext(UserContext);
-  const { dispatch } = useContext(AuthContext);
-  
+  const { user, dispatch } = useContext(AuthContext);
+  const [token, setToken] = useContext(TokenContext);
+
   const fetchUseruser = useCallback(async () => {
+    let error = "";
+    console.log(token);
     const config = {
-      headers: { Authorization: `Bearer ${userContext.token}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
-    const res =await axiosInstance.get("users/me", config);
-    if (res.status === 200) {
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-      setUserContext((oldValues) => {
-        return { ...oldValues, user: res.data };
-      });
-    } else {
-      if (res.status === 401) {
-        // Edge case: when the token has expired.
-        // This could happen if the refreshToken calls have failed due to network error or
-        // User has had the tab open from previous day and tries to click on the Fetch button
-        window.location.reload();
+    dispatch({ type: "LOGIN_START" });
+
+    const res = await axiosInstance.get("users/me", config);
+    if (res.status !== 200) {
+      if (res.status === 400) {
+        error = "Please fill all the fields correctly!";
+      } else if (res.status === 401) {
+        error = "Invalid email and password combination.";
       } else {
-        setUserContext((oldValues) => {
-          return { ...oldValues, user: null };
-        });
+        error = "some error occured. Please try again";
       }
+      dispatch({ type: "LOGIN_FAILURE", payload: error });
+    } else {
+      console.log(res.data);
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      console.log(res.data);
     }
-  }, [setUserContext, userContext.token]);
+  }, [dispatch, token]);
 
   useEffect(() => {
-    if (!userContext.user) {
+    if (!user) {
       fetchUseruser();
     }
-  }, [userContext.user, fetchUseruser]);
-
-  const refetchHandler = () => {
-    // set user to undefined so that spinner will be displayed and
-    //  fetchUseruser will be invoked from useEffect
-    setUserContext((oldValues) => {
-      return { ...oldValues, user: undefined };
-    });
-  };
-
+  }, [user, fetchUseruser]);
 
   return (
     <>
-      {!userContext.user ? (
-        <p>Loading...</p>
+      {!user ? (
+       <ReactLoading
+          type={"bars"}
+          color={"#03fc4e"}
+          height={100}
+          width={100}
+        />
+      
       ) : (
         <>
           <Topbar />

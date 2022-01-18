@@ -10,7 +10,7 @@ export default function DetailPage() {
     const [post, setPost] = useState({ likes: [], tags: [] });
     const [CommentLists, setCommentLists] = useState([]);
     const postId = useParams().postId;
-  console.log(postId);
+  // console.log(postId);
 
     useEffect(() => {        
       const fetchPost = async () => {
@@ -30,9 +30,9 @@ export default function DetailPage() {
            const res = await axiosInstance.get("/comment/getComment/" + postId);
            console.log(res.data);
            setCommentLists(CommentLists.concat(res.data));
-           console.log(res);
-           fetchComments();
-         };
+          //  console.log(res);
+      };
+      fetchComments();
       } catch (error) {
         console.log(error);
         alert(error);
@@ -46,10 +46,8 @@ export default function DetailPage() {
     return (
       <>
         <Topbar />
-        {console.log(post)}
         <Post key={postId} post={post} />;
         <Comments
-          key={postId}
           CommentLists={CommentLists}
           postId={postId}
           refreshFunction={updateComment}

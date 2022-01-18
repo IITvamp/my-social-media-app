@@ -1,96 +1,65 @@
-import axios from "axios";
-import { useState, useContext } from "react";
 import "./register.css";
+
+import { useState, useContext } from "react";
 import { useHistory } from "react-router";
-import { GoogleLogin } from "react-google-login";
-
-import { UserContext } from "../../context/UserContext";
+import { TokenContext } from "../../context/TokenContext";
 import { axiosInstance } from "../../config";
-
-
-const url = process.env.URL || "https://obscure-meadow-29718.herokuapp.com/api";
 
 export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  
+  const [token, setToken] = useContext(TokenContext);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
-  const [userContext, setUserContext] = useContext(UserContext);
+  // const [userContext, setUserContext] = useContext(UserContext);
 
   const history = useHistory();
 
   const LoginButtonHandler = () => {
-    history.push("/login")
-  };
-
-  const loginSuccess = () => {
-    console.log("Login success")
-  }
-
-  const loginFailure = () => {
-    console.log("Login failure");
+    history.push("/login");
   };
 
   const handleClick = async (e) => {
     e.preventDefault();
     if (passwordAgain !== password) {
       passwordAgain.setCustomValidity("Passwords don't match!");
-    }
-    else {
+    } else {
       setIsSubmitting(true);
       const ErrorMessage = "Something went wrong! Please try again later.";
       const user = {
-        firstname:firstName,
+        firstname: firstName,
         username: email,
         password: password,
         lastname: lastName,
-        email:email,
+        email: email,
       };
       try {
         const res = await axiosInstance.post("/auth/signup", user);
         setIsSubmitting(false);
         console.log(res.status);
-        if (res.status!==200) {
+        if (res.status !== 200) {
           if (res.status === 400) {
             setError("Please fill all the fields correctly!");
           } else if (res.status === 401) {
             setError("Invalid email and password combination.");
           } else if (res.status === 500) {
             console.log(res);
-            if (res.message) setError(res.message ||ErrorMessage);
-          }
-          else {
+            if (res.message) setError(res.message || ErrorMessage);
+          } else {
             setError(ErrorMessage);
           }
-        }
-        else {
+        } else {
           console.log(res);
-          setUserContext((oldValues) => {
-            return { ...oldValues, token: res.data.token };
-          });
+          setToken(res.data.token);
         }
-        history.push("/login");
-      }
-      catch (err) {
+        // history.push("/login");
+      } catch (err) {
         console.log(err);
       }
-
-
-      // const user = {
-      //   username: username.current.value,
-      //   email: email.current.value,
-      //   password: password.current.value,
-      // };
-      // try {
-      //   await axios.post(url + "/auth/register", user);
-      //   history.push("/login");
-      // } catch (err) {
-      //   console.log(err);
-      // }
     }
   };
 
@@ -99,7 +68,7 @@ export default function Register() {
       <div className="login">
         <div className="loginWrapper">
           <div className="loginLeft">
-            <h3 className="loginLogo">Inshorts</h3>
+            <h3 className="loginLogo">Newsshorts</h3>
             <span className="loginDesc">
               Read any news in 10 seconds on Inshorts
             </span>
@@ -158,15 +127,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-
-      <GoogleLogin
-        clientId="486729059700-ifbo2b2r6pmpfb7rctlu654snp89u10n.apps.googleusercontent.com"
-        buttonText="login through google"
-        isSignedIn={true}
-        onSuccess={loginSuccess}
-        onFailure={loginFailure}
-        cookiePolicy={"single_host_origin"}
-      />
     </div>
   );
 }

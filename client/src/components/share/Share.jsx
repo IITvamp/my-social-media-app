@@ -1,17 +1,12 @@
-import {
-  PermMedia,
-  Cancel,
-} from "@material-ui/icons";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
+import { PermMedia } from "@material-ui/icons";
+import ChipInput from "material-ui-chip-input";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { axiosInstance } from "../../config.js";
-
-
-import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { UserContext } from "../../context/UserContext";
-import ChipInput from "material-ui-chip-input";
-
 
 import {
   Card,
@@ -23,11 +18,9 @@ import {
   Box,
   TextareaAutosize,
   Button,
+  Chip,
 } from "@material-ui/core";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import { Chip } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -69,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#4f9eed",
     marginRight: 8,
   },
-
 
   newsCard: {
     width: "100%",
@@ -120,10 +112,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Share() {
-  // const { user } = useContext(AuthContext);
-  const [userContext, setUserContext] = useContext(UserContext);
+  const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -131,18 +121,17 @@ export default function Share() {
   const [tags, setTags] = useState([]);
   const [file, setFile] = useState(null);
 
-  const user = userContext.user;
   console.log(user);
 
   const classes = useStyles();
-
 
   const handleAddChip = (chip) => {
     setTags([...tags, chip]);
   };
 
   const handleDeleteChip = (chipToDelete) => {
-    setTags(tags.filter((chip) => chip !== chipToDelete),);};
+    setTags(tags.filter((chip) => chip !== chipToDelete));
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -153,7 +142,7 @@ export default function Share() {
       url: url,
       tags: tags,
     };
-    
+
     if (file) {
       const data = new FormData();
       const fileName = Date.now() + file.name;
@@ -251,77 +240,12 @@ export default function Share() {
           Post
         </Button>
       </Box>
-      {/* // <div className="share">
-    //   <div className="shareWrapper">
-    //     <div className="shareTop">
-    //       <input
-    //         placeholder={"What's the title " + user.username + "?"}
-    //         className="shareInput"
-    //         onChange={(e) => setTitle(e.target.value)}
-    //       />
-    //     </div>
-    //     <hr className="shareHr" />
-    //     <div className="shareTop">
-    //       <input
-    //         placeholder={"What's the description " + user.username + "?"}
-    //         className="shareInput"
-    //         onChange={(e) => setDesc(e.target.value)}
-    //       />
-    //     </div>
-    //     <hr className="shareHr" />
-    //     <div className="shareTop">
-    //       <input
-    //         placeholder={"What's the url " + user.username + "?"}
-    //         className="shareInput"
-    //         onChange={(e) => setUrl(e.target.value)}
-    //       />
-    //       <div />
-    //       <hr className="shareHr" />
-    //     </div>
-
-    //     <div style={{ padding: "5px 0", width: "94%" }}>
-    //       <ChipInput
-    //         name="tags"
-    //         variant="outlined"
-    //         label="Tags"
-    //         fullWidth
-    //         value={tags}
-    //         onAdd={(chip) => handleAddChip(chip)}
-    //         onDelete={(chip) => handleDeleteChip(chip)}
-    //       />
-    //     </div>
-    //   </div>
-    //   <hr className="shareHr" />
-    //   {/* {file && (
-    //     <div className="shareImgContainer">
-    //       <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-    //       <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
-    //     </div>
-    //   )} */}
-      {/* //   <form className="shareBottom" onSubmit={submitHandler}>
-    //     <div className="shareOptions">
-    //       <label htmlFor="file" className="shareOption">
-    //         <PermMedia htmlColor="tomato" className="shareIcon" />
-    //         <span className="shareOptionText">Photo or Video</span>
-    //         <input
-    //           style={{ display: "none" }}
-    //           type="file"
-    //           id="file"
-    //           accept=".png,.jpeg,.jpg"
-    //           onChange={(e) => setFile(e.target.files[0])}
-    //         />
-    //       </label>
-    //     </div>
-    //     <button className="shareButton" type="submit">
-    //       Share
-    //     </button>
-    //   </form> */}
 
       <>
         <Card className={classes.newsCard}>
           <CardHeader
             avatar={
-              <Link to={`/profile/${user.username}`}>
+              <Link to={`/profile/${user.firstname}`}>
                 <Avatar
                   aria-label="news card"
                   src={
@@ -333,7 +257,7 @@ export default function Share() {
                 ></Avatar>
               </Link>
             }
-            title={user.username}
+            title={user.firstname}
           ></CardHeader>
 
           <CardContent className={classes.cardContent}>

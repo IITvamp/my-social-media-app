@@ -1,14 +1,14 @@
 
-import { PermMedia, Cancel } from "@material-ui/icons";
-
-import { useContext, useRef, useState, useEffect } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { axiosInstance } from "../../config";
-import ChipInput from "material-ui-chip-input";
+import { useContext, useState, useEffect } from "react"; 
 import { useParams } from "react-router";
-import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { Chip } from "@material-ui/core";
+
+import { PermMedia } from "@material-ui/icons";
+import ChipInput from "material-ui-chip-input";
+import { makeStyles } from "@material-ui/core/styles";
+
+import { axiosInstance } from "../../config.js";
+import { AuthContext } from "../../context/AuthContext";
 
 import {
   Card,
@@ -17,11 +17,53 @@ import {
   CardContent,
   Grid,
   Typography,
+  Box,
+  TextareaAutosize,
+  Button,
+  Chip,
 } from "@material-ui/core";
 
-import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  FormBox: {
+    display: "block",
+    height: "content-fit",
+    backgroundColor: "RGB(203, 213, 223)",
+    borderRadius: 8,
+    textAlign: "left",
+    padding: 24,
+    width: "90%",
+    margin: "auto",
+    marginTop: "40px",
+  },
+  textbox: {
+    width: "100%",
+    boxSizing: "border-box",
+    backgroundColor: "RGB(237, 242, 246)",
+    padding: 8,
+    border: "none",
+  },
+
+  panel: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#3d4953",
+    padding: 8,
+    marginTop: 8,
+  },
+  comment_as: {
+    display: "inline-block",
+    fontSize: 14,
+    color: "#cccccc",
+    marginRight: 8,
+  },
+  username: {
+    display: "inline-block",
+    fontSize: 14,
+    color: "#4f9eed",
+    marginRight: 8,
+  },
+
   newsCard: {
     width: "70%",
     marginTop: 20,
@@ -73,7 +115,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UpdatePost() {
   const postId = useParams().postId;
-  const location = useLocation();
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [post, setPost] = useState({});
@@ -139,61 +180,59 @@ export default function UpdatePost() {
   };
 
     return (
-      <div className="share">
-        <div className="shareWrapper">
-          <div className="shareTop">
-            <input
-              placeholder={"What's the title " + user.username + "?"}
-              className="shareInput"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <hr className="shareHr" />
-          <div className="shareTop">
-            <input
-              placeholder={"What's the description " + user.username + "?"}
-              className="shareInput"
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-            />
-          </div>
-          <hr className="shareHr" />
-          <div className="shareTop">
-            <input
-              placeholder={"What's the url " + user.username + "?"}
-              className="shareInput"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-            <div />
-            <hr className="shareHr" />
-          </div>
+    <Box className={classes.FormBox}>
+        <Box>
+          <TextareaAutosize
+            placeholder="What is the title?"
+            minRows={2}
+            value={title}
+            onChange={(value) => {
+              setTitle(value.target.value);
+            }}
+            className={classes.textbox}
+          />
+        </Box>
 
-          <div style={{ padding: "5px 0", width: "94%" }}>
-            <ChipInput
-              name="tags"
-              variant="outlined"
-              label="Tags"
-              fullWidth
-              value={tags}
-              onAdd={(chip) => handleAddChip(chip)}
-              onDelete={(chip) => handleDeleteChip(chip)}
-            />
-          </div>
-        </div>
-        <hr className="shareHr" />
-        {/* {file && (
-          <div className="shareImgContainer">
-            <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-            <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
-          </div>
-        )} */}
-        <form className="shareBottom" onSubmit={submitHandler}>
-          <div className="shareOptions">
+        <Box>
+          <TextareaAutosize
+            placeholder="What is the description?"
+            minRows={10}
+            value={desc}
+            onChange={(value) => {
+              setDesc(value.target.value);
+            }}
+            className={classes.textbox}
+          />
+        </Box>
+
+        <Box>
+          <TextareaAutosize
+            placeholder="What is the url?"
+            minRows={2}
+            value={url}
+            onChange={(value) => {
+              setUrl(value.target.value);
+            }}
+            className={classes.textbox}
+          />
+        </Box>
+        <Box>
+          <ChipInput
+            name="tags"
+            variant="outlined"
+            label="Tags"
+            fullWidth
+            value={tags}
+            onAdd={(chip) => handleAddChip(chip)}
+            onDelete={(chip) => handleDeleteChip(chip)}
+          />
+        </Box>
+
+        <Box className={classes.panel}>
+          <Box>
             <label htmlFor="file" className="shareOption">
               <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span className="shareOptionText">Photo or Video</span>
+              <span>Image</span>
               <input
                 style={{ display: "none" }}
                 type="file"
@@ -202,17 +241,29 @@ export default function UpdatePost() {
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
-          </div>
-          <button className="shareButton" type="submit">
-            Share
-          </button>
-        </form>
+          </Box>
+
+          <Button
+            style={{
+              display: "inline-block",
+              fontSize: 14,
+              marginLeft: "auto",
+              color: "#FFFFFF",
+              backgroundColor: "#4f9eed",
+            }}
+            // disabled={disabled}
+            classname={classes.submitbutton}
+            onClick={submitHandler}
+          >
+            Post
+          </Button>
+        </Box>
 
         <>
           <Card className={classes.newsCard}>
             <CardHeader
               avatar={
-                <Link to={`/profile/${user.username}`}>
+                <Link to={`/profile/${user.firstname}`}>
                   <Avatar
                     aria-label="news card"
                     src={
@@ -224,7 +275,7 @@ export default function UpdatePost() {
                   ></Avatar>
                 </Link>
               }
-              title={user.username}
+              title={user.firstname}
             ></CardHeader>
 
             <CardContent className={classes.cardContent}>
@@ -233,7 +284,7 @@ export default function UpdatePost() {
                   {console.log(file)}
                   {console.log(image)}
                   {console.log(file === image)}
-                  { file && image &&
+                  {file && image && (
                     <img
                       src={
                         file
@@ -245,7 +296,7 @@ export default function UpdatePost() {
                       alt="haha"
                       className={classes.image}
                     />
-                  }
+                  )}
                 </Grid>
 
                 <Grid
@@ -290,6 +341,6 @@ export default function UpdatePost() {
             </CardContent>
           </Card>
         </>
-      </div>
+      </Box>
     );
 }

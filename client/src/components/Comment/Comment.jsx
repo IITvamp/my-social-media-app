@@ -35,12 +35,12 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
   commentspan: {
+    
     fontSize: 20,
     fontWeight: 900,
     display: "inline-block",
     marginRight: 4,
     marginBottom: 8,
-    color: "#FFFFFF",
   },
   commentscountpan: {
     fontSize: 20,
@@ -89,13 +89,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#4f9eed",
     marginRight: 8,
   },
-  submitbutton: {
-    display: "inline-block",
-    fontSize: 14,
-    margin: "auto",
-    color: "#FFFFFF",
-    backgroundColor: "#4f9eed",
-  },
 }));
 
 function Comments(props) {
@@ -138,8 +131,9 @@ function Comments(props) {
 
   return (
     <Box className={classes.CommentBox}>
-      <Typography classname={classes.commentspan}>Comments</Typography>
-      <Typography classname={classes.commentscountpan}>9</Typography>
+      <Typography classname={classes.commentspan} stylr={{ color: "#FFF" }}>
+        Comments
+      </Typography>
 
       {props.CommentLists &&
         props.CommentLists.map(
@@ -147,6 +141,7 @@ function Comments(props) {
             !comment.responseTo && (
               <>
                 <SingleComment
+                  key={comment._id}
                   comment={comment}
                   postId={props.postId}
                   refreshFunction={props.refreshFunction}
@@ -178,18 +173,24 @@ function Comments(props) {
               <Typography classname={classes.comment_as}>
                 Comment as{" "}
                 <Link to="" className={classes.username}>
-                  {user.username}
+                  {user.firstname}
                 </Link>
               </Typography>
-              
+
               <Button
                 disabled={disabled}
                 classname={classes.submitbutton}
                 onClick={onSubmit}
+                style={{
+                  display: "inline-block",
+                  fontSize: 14,
+                  marginLeft: "auto",
+                  color: "#FFFFFF",
+                  backgroundColor: "#4f9eed",
+                }}
               >
                 Comment
               </Button>
-              
             </Box>
           </Box>
         </>
