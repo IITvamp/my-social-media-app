@@ -89,6 +89,6 @@ app.use("/api/posts", postRoute);
 app.use("/api/comment", commentRoute); 
 
 
-app.listen(process.env.PORT || 8800, () => {
+app.listen(process.env.PORT || 8800, '0.0.0.0',  () => {
   console.log("Backend server is running!");
 });
