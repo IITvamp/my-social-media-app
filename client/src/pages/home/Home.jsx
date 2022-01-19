@@ -15,7 +15,6 @@ export default function Home() {
 
   const fetchUseruser = useCallback(async () => {
     let error = "";
-    console.log(token);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -32,9 +31,7 @@ export default function Home() {
       }
       dispatch({ type: "LOGIN_FAILURE", payload: error });
     } else {
-      console.log(res.data);
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
-      console.log(res.data);
     }
   }, [dispatch, token]);
 
