@@ -55,6 +55,7 @@ export default function Register() {
         } else {
           console.log(res);
           setToken(res.data.token);
+          window.localStorage.setItem("newsshorts_token", res.data.token);
         }
         // history.push("/login");
       } catch (err) {

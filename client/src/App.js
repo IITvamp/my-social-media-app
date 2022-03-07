@@ -23,7 +23,8 @@ function App() {
   console.log(token);
 
   const verifyUser = useCallback(async () => {
-    const res =await axiosInstance.post("/auth/refreshToken");
+    const token = window.localStorage.getItem("newsshorts_token");
+    const res =await axiosInstance.post("/auth/refreshToken", {token} );
     
     if (res.status === 200) {
       setToken(res.data.token);

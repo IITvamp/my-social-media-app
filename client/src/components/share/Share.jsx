@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { PermMedia } from "@material-ui/icons";
@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { axiosInstance } from "../../config.js";
 import { AuthContext } from "../../context/AuthContext";
+import { imageUpload } from "../../imageUpload.js";
 
 import {
   Card,
@@ -133,6 +134,10 @@ export default function Share() {
     setTags(tags.filter((chip) => chip !== chipToDelete));
   };
 
+  // useEffect(() => {
+    
+  // })
+
   const submitHandler = async (e) => {
     e.preventDefault();
     const newPost = {
@@ -144,15 +149,13 @@ export default function Share() {
     };
 
     if (file) {
-      const data = new FormData();
-      const fileName = Date.now() + file.name;
-      data.append("name", fileName);
-      data.append("file", file);
-      newPost.img = fileName;
+      const media = [];
+      media.push(file);
+      console.log(media);
+      let newArr = [];
+      if(media.length > 0) newArr = await imageUpload(media);
+      newPost.img = newArr[0].url;
       console.log(newPost);
-      try {
-        await axiosInstance.post("/upload", data);
-      } catch (err) {}
     }
     try {
       await axiosInstance.post("/posts", newPost);

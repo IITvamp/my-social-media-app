@@ -7,7 +7,6 @@ import { useHistory } from "react-router";
 
 import { axiosInstance } from "../../config";
 
-
 export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -23,7 +22,7 @@ export default function Login() {
 
   const RegisterButtonHandler = () => {
     history.push("/register");
-  }
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -34,7 +33,7 @@ export default function Login() {
     });
 
     setIsSubmitting(false);
-    if (res.status!==200) {
+    if (res.status !== 200) {
       if (res.status === 400) {
         setError("Please fill all the fields correctly!");
       } else if (res.status === 401) {
@@ -42,17 +41,13 @@ export default function Login() {
       } else {
         setError(ErrorMessage);
       }
-      
-    }
-    else {
+    } else {
       console.log(res.data.token);
       setToken(res.data.token);
+      window.localStorage.setItem("newsshorts_token", res.data.token);
       console.log(token);
-      
     }
   };
-
-
 
   return (
     <div className="login">

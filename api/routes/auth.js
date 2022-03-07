@@ -48,22 +48,23 @@ router.post("/signup", (req, res, next) => {
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
   try {
     const token = getToken({ _id: req.user._id });
+    console.log(token, "login token")
     res.cookie("token", token, COOKIE_OPTIONS);
     res.status(200).send({ success: true, token, token });
   } catch (error) {
     res.status(400).send("some error occured");
   }
-  
 });
 
 
 router.post("/refreshToken",async (req, res, next) => {
-  const { signedCookies = {} } = req;
-  const token = signedCookies.token;
-  console.log(signedCookies.token);
-  console.log(req.cookies);
-
+  // const { signedCookies = {} } = req;
+  // const token = signedCookies.token;
+  // console.log(signedCookies.token);
+  // console.log(req.cookies);
+  const token = req.body.token;
   if (token) {
+    console.log(token)
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       console.log(payload);
